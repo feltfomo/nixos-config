@@ -20,14 +20,9 @@
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
-          home-manager.users.zynth = { pkgs, ... }: {
-            home.username = "zynth";
-            home.homeDirectory = "/home/zynth";
-            home.stateVersion = "25.05";
-            programs.zsh.enable = true;
-            # no home.packages here; packages come from packages.nix system-wide
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.zynth = import ./home.nix;
           };
         }
       ];
