@@ -19,6 +19,7 @@
         specialArgs = { inherit inputs system pkgs; };
         modules = [
           ./configuration.nix
+
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -34,6 +35,9 @@
               ];
             };
           }
+
+          nixpkgs.nixosModules.readOnlyPkgs
+          { nixpkgs.pkgs = pkgs; }
         ];
       };
     };
