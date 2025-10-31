@@ -47,7 +47,6 @@
 
   hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.opengl.enable = true;
   services.dbus.enable = true;
 
   xdg.portal = {
