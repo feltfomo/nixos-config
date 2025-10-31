@@ -17,13 +17,11 @@
         inherit system;
         modules = [
           ./configuration.nix
-
           ({ ... }: {
             environment.systemPackages = [
               zen-browser.packages.${system}.default
             ];
           })
-
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -31,6 +29,7 @@
             home-manager.users.zynth = { pkgs, ... }: {
               home.username = "zynth";
               home.homeDirectory = "/home/zynth";
+              home.stateVersion = "25.05";
               programs.zsh.enable = true;
               home.packages = [
                 zen-browser.packages.${system}.default
