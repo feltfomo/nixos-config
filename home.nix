@@ -8,6 +8,7 @@
   xdg.configFile."kitty".source  = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/kitty";
   xdg.configFile."rofi".source  = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/rofi";
   xdg.configFile."hypr".source  = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/hypr";
+  xdg.configFile."waybar".source  = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/waybar";
 
   gtk = {
     enable = true;
