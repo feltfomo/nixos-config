@@ -45,8 +45,9 @@
   # services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
-  hardware.opengl.enable = true;
   hardware.graphics.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.opengl.enable = true;
   services.dbus.enable = true;
 
   xdg.portal = {
@@ -67,10 +68,6 @@
   #   enable = true;
   #   pulse.enable = true;
   # };
-
-  # Graphics + NVIDIA driver
-  hardware.graphics.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
