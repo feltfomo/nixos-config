@@ -6,6 +6,7 @@
   home.stateVersion = "25.05";
 
   xdg.configFile."kitty".source  = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/kitty";
+  xdg.configFile."rofi".source  = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/rofi";
 
   gtk = {
     enable = true;
