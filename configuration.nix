@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./packages.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -82,22 +83,12 @@
     ];
   };
 
+  users.defaultUserShell = pkgs.zsh;
+
   programs.firefox.enable = true;
   programs.hyprland.enable = true;
   programs.nix-ld.enable = true;
-
-  # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    kitty
-    zed-editor
-    btop
-    fastfetch
-    neovim
-    git
-  ];
+  programs.zsh.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
