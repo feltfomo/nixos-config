@@ -1,11 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   home.username = "zynth";
   home.homeDirectory = "/home/zynth";
   home.stateVersion = "25.05";
 
-  xdg.configFile."kitty".source = ./dots/kitty;
+  xdg.configFile."kitty".source  = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/kitty";
 
   gtk = {
     enable = true;
