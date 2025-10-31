@@ -16,19 +16,18 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./configuration.nix
+
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "backup";
-          home-manager.users.zynth = { inputs, pkgs, ... }: {
+          home-manager.users.zynth = { pkgs, ... }: {
             home.username = "zynth";
             home.homeDirectory = "/home/zynth";
             home.stateVersion = "25.05";
             programs.zsh.enable = true;
-            home.packages = [
-              inputs.zen-browser.packages.${pkgs.system}.default
-            ];
+            # no home.packages here; packages come from packages.nix system-wide
           };
         }
       ];
