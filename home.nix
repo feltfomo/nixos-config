@@ -5,6 +5,8 @@
   home.homeDirectory = "/home/zynth";
   home.stateVersion = "25.05";
 
+  xdg.configFile."kitty".source = ./dots/kitty;
+
   gtk = {
     enable = true;
     theme = {
