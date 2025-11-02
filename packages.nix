@@ -5,6 +5,7 @@
     vim
     wget
     kitty
+    ghostty
     zed-editor
     btop
     fastfetch
