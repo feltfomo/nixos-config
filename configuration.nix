@@ -57,6 +57,17 @@
     ];
   };
 
+  fonts.packages = with pkgs; [
+      inter
+      noto-fonts
+      noto-fonts-emoji
+      (nerdfonts.override { fonts = [ "Noto" ]; })
+    ];
+
+    # Optional but recommended
+    fonts.fontconfig.enable = true;
+
+
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
