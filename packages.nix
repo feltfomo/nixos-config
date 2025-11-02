@@ -12,8 +12,9 @@
     git
     rofi-wayland
     waybar
-    gsettings-desktop-schemes
-    dconf
+    gsettings-desktop-schemas
+    glib
+    dconf-editor
     inputs.zen-browser.packages.${pkgs.system}.default
     inputs.swww.packages.${pkgs.system}.swww
   ];

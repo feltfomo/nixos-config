@@ -57,16 +57,21 @@
     ];
   };
 
-  fonts.packages = with pkgs; [
+  fonts = {
+    fontconfig.enable = true;  # you already had this (kept)
+    packages = with pkgs; [
       inter
       noto-fonts
       noto-fonts-emoji
-      (nerdfonts.override { fonts = [ "Noto" ]; })
+
+      # pick ONE nerd font you actually want as a patched mono:
+      nerd-fonts.jetbrains-mono
+      # or: nerd-fonts.fira-code
+      # or: nerd-fonts.hack
     ];
+  };
 
-    # Optional but recommended
-    fonts.fontconfig.enable = true;
-
+  programs.dconf.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
