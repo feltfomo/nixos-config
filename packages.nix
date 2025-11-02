@@ -4,7 +4,9 @@
   environment.systemPackages = with pkgs; [
     vim
     wget
-    kitty
+    ffmpeg
+    grimblast
+    wl-clipboard
     ghostty
     zed-editor
     btop
