@@ -7,6 +7,9 @@
     ffmpeg
     grimblast
     wl-clipboard
+    prismlauncher
+    spotify
+    equibop
     ghostty
     zed-editor
     btop
