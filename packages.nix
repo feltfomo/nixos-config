@@ -9,6 +9,7 @@
     wl-clipboard
     prismlauncher
     spotify
+    spicetify-cli
     equibop
     ghostty
     zed-editor
