@@ -7,9 +7,11 @@
     ffmpeg
     grimblast
     wl-clipboard
+    atuin
     prismlauncher
     jetbrains.idea-community-bin
     vscodium
+    direnv
     #spotify
     spicetify-cli
     discord
