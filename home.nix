@@ -12,7 +12,7 @@ in
   home.packages = with pkgs; [
     catppuccin-gtk
     papirus-icon-theme
-    bibata-cursor-theme
+    bibata-cursors
     qt6ct
   ];
 
@@ -23,26 +23,20 @@ in
       package = pkgs.catppuccin-gtk;
     };
     iconTheme = { name = "Papirus-Dark"; package = pkgs.papirus-icon-theme; };
-    cursorTheme = { name = "Bibata-Modern-Ice"; package = pkgs.bibata-cursor-theme; };
+    cursorTheme = {
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+    };
     gtk3.extraConfig = { gtk-application-prefer-dark-theme = 1; };
     gtk4.extraConfig = { gtk-application-prefer-dark-theme = 1; };
   };
 
   home.pointerCursor = {
-    package = pkgs.bibata-cursor-theme;
-    name = "Bibata-Modern-Ice";
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
     size = 24;
     gtk.enable = true;
     x11.enable = true;
-  };
-
-  home.sessionVariables = {
-    GTK_THEME        = "Catppuccin-Mocha-Standard-Blue-Dark";
-    GTK_ICON_THEME   = "Papirus-Dark";
-    GTK_CURSOR_THEME = "Bibata-Modern-Ice";
-    XCURSOR_THEME    = "Bibata-Modern-Ice";
-    XCURSOR_SIZE     = "24";
-    MOZ_ENABLE_WAYLAND = "1";
   };
 
   qt = {

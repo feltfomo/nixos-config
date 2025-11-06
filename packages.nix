@@ -9,7 +9,7 @@
     wl-clipboard
     prismlauncher
     jetbrains.idea-community-bin
-    vscodium-fhs
+    vscodium
     #spotify
     spicetify-cli
     discord
