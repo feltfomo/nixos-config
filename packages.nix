@@ -11,7 +11,7 @@
     jetbrains.idea-community-bin
     #spotify
     spicetify-cli
-    equibop
+    discord
     ghostty
     zed-editor
     btop

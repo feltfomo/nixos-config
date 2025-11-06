@@ -97,9 +97,35 @@
 
   programs.firefox.enable = true;
   programs.hyprland.enable = true;
-  programs.nix-ld.enable = true;
   programs.zsh.enable = true;
   programs.gamemode.enable = true;
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    glib
+    zlib
+    expat
+    dbus
+    nspr
+    nss
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXrandr
+    xorg.libXcursor
+    xorg.libXfixes
+    xorg.libXi
+    libxkbcommon
+    xorg.libxcb
+    wayland
+    libdrm
+    mesa
+    alsa-lib
+    libpulseaudio
+    libnotify
+    libsecret
+    xorg.libXScrnSaver
+  ];
 
   programs.steam = {
     enable = true;
