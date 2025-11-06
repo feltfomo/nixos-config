@@ -8,7 +8,8 @@
     grimblast
     wl-clipboard
     prismlauncher
-    spotify
+    jetbrains.idea-community-bin
+    #spotify
     spicetify-cli
     equibop
     ghostty
