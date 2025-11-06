@@ -117,6 +117,9 @@
     xorg.libXi
     libxkbcommon
     xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXScrnSaver
     wayland
     libdrm
     mesa
@@ -124,7 +127,15 @@
     libpulseaudio
     libnotify
     libsecret
-    xorg.libXScrnSaver
+    libgbm
+    libglvnd
+    atk
+    gtk3
+    pango
+    cairo
+    gdk-pixbuf
+    at-spi2-core
+    cups
   ];
 
   programs.steam = {
