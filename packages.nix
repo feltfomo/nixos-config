@@ -10,9 +10,10 @@
     atuin
     prismlauncher
     jetbrains.idea-community-bin
+    exodus
     vscodium
     direnv
-    #spotify
+    niri
     spicetify-cli
     discord
     ghostty
