@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports =
@@ -20,6 +20,8 @@
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  home-manager.backupFileExtension = "backup";
 
   networking.hostName = "fomonix";
   # Pick only one of the below networking options.

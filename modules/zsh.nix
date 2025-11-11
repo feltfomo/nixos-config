@@ -6,7 +6,7 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     
-    initExtra = ''
+    initContent = ''  # changed from initExtra
       if [[ -z "$FASTFETCH_RAN" ]]; then
         export FASTFETCH_RAN=1
         fastfetch
