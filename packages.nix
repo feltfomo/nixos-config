@@ -1,5 +1,4 @@
 { pkgs, inputs, ... }:
-
 {
   environment.systemPackages = with pkgs; [
     vim
@@ -13,14 +12,15 @@
     exodus
     vscodium
     direnv
-    niri
     spicetify-cli
     discord
     ghostty
+    kitty
+    alacritty
     zed-editor
     btop
     fastfetch
-    neovim
+    # neovim removed - now managed in home.nix
     xfce.thunar
     git
     rofi-wayland
@@ -35,6 +35,7 @@
     qt6Packages.qtstyleplugin-kvantum
     adwaita-qt
     adwaita-qt6
+    pkgs.os-prober
     inputs.zen-browser.packages.${pkgs.system}.default
     inputs.swww.packages.${pkgs.system}.swww
   ];

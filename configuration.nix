@@ -7,9 +7,16 @@
       ./packages.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    systemd-boot.enable = false;
+    grub = {
+      enable = true;
+      device = "nodev";
+      efiSupport = true;
+      useOSProber = true;
+    };
+    efi.canTouchEfiVariables = true;
+  };
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -40,13 +47,46 @@
   hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   services.dbus.enable = true;
+  services.tumbler.enable = true;
+
+  systemd.user.services.xdg-desktop-portal-gtk = {
+    environment = {
+      WAYLAND_DISPLAY = "wayland-1";
+    };
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = "1s";
+    };
+  };
+
+  systemd.user.services.xdg-desktop-portal = {
+    environment = {
+      WAYLAND_DISPLAY = "wayland-1";
+    };
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = "1s";
+    };
+  };
 
   xdg.portal = {
     enable = true;
     extraPortals = [
-      pkgs.xdg-desktop-portal-hyprland
       pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-hyprland  # add it back
     ];
+    xdgOpenUsePortal = true;
+    config = {
+      common = {
+        default = [ "gtk" ];
+        "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+      };
+      niri = {
+        default = [ "wlr" "gtk" ];
+      };
+    };
+    wlr.enable = true;
   };
 
   fonts = {
@@ -84,10 +124,10 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.zynth = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" ]; # Enable 'sudo' for the user.
     packages = with pkgs; [
       tree
     ];
@@ -99,6 +139,7 @@
   programs.hyprland.enable = true;
   programs.zsh.enable = true;
   programs.gamemode.enable = true;
+  programs.niri.enable = true;
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
