@@ -22,6 +22,10 @@
     gtk4.extraConfig = { gtk-application-prefer-dark-theme = 1; };
   };
   
+  home.sessionVariables = {
+    GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
+  };
+  
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Classic";
@@ -45,10 +49,13 @@
     "gtk-4.0/assets".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
     "gtk-4.0/gtk.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
     "gtk-4.0/gtk-dark.css".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
-    "kitty".source  = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/kitty";
-    "rofi".source   = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/rofi";
-    "hypr".source   = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/hypr";
-    "waybar".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/waybar";
-    "nvim".source = config.lib.file.mkOutOfStoreSymlink "/etc/nixos/dots/nvim";
+    
+    "gtk-3.0/settings.ini".text = ''
+      [Settings]
+      gtk-application-prefer-dark-theme=1
+      gtk-theme-name=Catppuccin-Mocha-Standard-Blue-Dark
+      gtk-icon-theme-name=Papirus-Dark
+      gtk-cursor-theme-name=Bibata-Modern-Classic
+    '';
   };
 }

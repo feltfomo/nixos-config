@@ -6,6 +6,7 @@
     ./modules/neovim.nix
     ./modules/gtk.nix
     ./modules/spicetify.nix
+    ./modules/dotfiles.nix
   ];
   
   home.username = "zynth";
