@@ -5,15 +5,18 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    
+
     initContent = ''
-      if [[ -z "$FASTFETCH_RAN" ]]; then
-        export FASTFETCH_RAN=1
-        fastfetch
-      fi
+      precmd() {
+        [[ -o interactive ]] || return
+        if [[ -z "$__ff" ]]; then
+          __ff=1
+          fastfetch 2>/dev/null
+        fi
+      }
     '';
   };
-  
+
   programs.atuin = {
     enable = true;
     enableZshIntegration = true;

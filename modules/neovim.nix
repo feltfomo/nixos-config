@@ -1,3 +1,4 @@
+# modules/neovim.nix
 { pkgs, ... }:
 {
   programs.neovim = {
@@ -19,4 +20,20 @@
       tree-sitter
     ];
   };
+
+  home.file.".config/nvim/lua/plugins/presence.lua".text = ''
+    return {
+      "andweeb/presence.nvim",
+      event = "VeryLazy",
+      opts = {
+        neovim_image_text = "Neovim",
+        main_image = "neovim",
+        editing_text = "Editing %s",
+        file_explorer_text = "Browsing %s",
+        git_commit_text = "Committing changes",
+        workspace_text = "Working on %s",
+        line_number_text = "Line %s/%s",
+      },
+    }
+  '';
 }
