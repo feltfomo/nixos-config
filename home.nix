@@ -39,7 +39,6 @@
     zed-editor
     xfce.thunar
     rofi-wayland
-    waybar
     inputs.zen-browser.packages.${pkgs.system}.default
     inputs.swww.packages.${pkgs.system}.swww
     inputs.quickshell.packages.${pkgs.system}.default
