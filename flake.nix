@@ -8,6 +8,7 @@
     zen-browser.url = "github:youwen5/zen-browser-flake";
     swww.url = "github:LGFae/swww";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
   };
 
   outputs = { self, nixpkgs, home-manager, spicetify-nix, ... }@inputs: {
