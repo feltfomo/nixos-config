@@ -5,6 +5,7 @@
     wget
     ffmpeg
     wl-clipboard
+    copyq
     git
     btop
     pkgs.os-prober

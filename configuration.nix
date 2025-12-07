@@ -11,6 +11,11 @@
     ./modules/system/programs.nix
   ];
 
+  programs.appimage.enable = true;
+  programs.appimage.binfmt = true;
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Networking
   networking = {
     hostName = "fomonix";

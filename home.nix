@@ -26,6 +26,7 @@
     qt6Packages.qtstyleplugin-kvantum
     adwaita-qt
     adwaita-qt6
+    kdePackages.qtdeclarative
     dconf-editor
     vscodium
     prismlauncher
@@ -44,7 +45,13 @@
     inputs.quickshell.packages.${pkgs.system}.default
     fastfetch
     grimblast
+    satty
     atuin
     direnv
+    code-cursor
+    gcc
+    rustup
+    pkg-config
+    openssl
   ];
 }
