@@ -13,7 +13,7 @@ in
           owner = "ohitstom"; 
           repo = "spicetify-extensions"; 
           rev = "main";
-          sha256 = "sha256-x/xmOoSsr2zQ12ZpM4hDIs/ryvCusj8LShTLoH9KMq8=";
+          sha256 = "sha256-GVlfji0n9LX1xi7l4gG6Tboo4o554auYplM8CW08tFQ=";
         }) + "/npvAmbience";
       }
     ];

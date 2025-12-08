@@ -48,7 +48,6 @@
     satty
     atuin
     direnv
-    code-cursor
     gcc
     rustup
     pkg-config
