@@ -9,7 +9,6 @@
     duf
 
     # Editors
-    zed-editor
     vscodium
 
     # Browsers
