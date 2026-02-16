@@ -19,6 +19,7 @@
     ./modules/system/overlays.nix
     ./modules/system/thunar.nix
     ./modules/system/nix-settings.nix
+    ./modules/system/home-manager.nix
 
     inputs.silentSDDM.nixosModules.default
   ];

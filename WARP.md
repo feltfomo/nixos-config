@@ -37,6 +37,10 @@ sudo nix-collect-garbage -d
 
 # Enter Java dev shell
 nix develop /etc/nixos#java
+
+# Stage and commit after each successful rebuild
+sudo git -C /etc/nixos add -A
+sudo git -C /etc/nixos commit -m "refactor: <description of change>"
 ```
 
 ---
@@ -82,6 +86,12 @@ nix develop /etc/nixos#java
 - The `LD_LIBRARY_PATH` session variable in `home.nix` — required for OpenGL.
 - Anything under `niri/` — KDL configs are managed manually.
 - The `dms` and `noctalia-shell` module imports.
+
+### Git workflow
+- After each successful `nixos-rebuild switch`, stage and commit immediately.
+- Use `sudo git -C /etc/nixos add -A` then `sudo git -C /etc/nixos commit -m "refactor: <what changed>"`.
+- One commit per refactor goal — do not batch multiple goals into one commit.
+- Never commit if the rebuild failed or dry-run showed errors.
 
 ---
 
