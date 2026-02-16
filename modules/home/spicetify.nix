@@ -24,7 +24,13 @@ in
       hidePodcasts
       shuffle
       simpleBeautifulLyrics
+      beautifulLyrics
       betterGenres
+      fullAlbumDate
+      goToSong
+      history
+      savePlaylists
+      copyLyrics
       fullAppDisplay
       shuffle
       powerBar
