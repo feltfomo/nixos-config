@@ -21,8 +21,7 @@
     ./modules/system/nix-settings.nix
     ./modules/system/home-manager.nix
     ./modules/system/user.nix
-
-    inputs.silentSDDM.nixosModules.default
+    ./modules/system/sddm.nix
   ];
 
   # Services
@@ -30,14 +29,6 @@
     dbus.enable = true;
     xserver.enable = false;
     flatpak.enable = true;
-  };
-
-  programs.silentSDDM = {
-    enable = true;
-    theme = "rei";
-    profileIcons = {
-      zynth = "/home/zynth/Pictures/avatar.jpg";
-    };
   };
 
   system.stateVersion = "25.11";
