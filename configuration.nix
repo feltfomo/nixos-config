@@ -32,7 +32,7 @@
     enable = true;
     theme = "rei";
     profileIcons = {
-      zynth = "/home/zynth/Pictures/avatar.png";
+      zynth = "/home/zynth/Pictures/avatar.jpg";
     };
   };
 
