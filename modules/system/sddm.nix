@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  vars,
   ...
 }:
 {
@@ -11,7 +12,7 @@
     enable = true;
     theme = "rei";
     profileIcons = {
-      zynth = "/home/zynth/Pictures/avatar.jpg";
+      ${vars.username} = vars.avatarPath;
     };
   };
 }

@@ -59,11 +59,12 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      vars = import ./modules/system/variables.nix;
     in
     {
       nixosConfigurations.fomonix = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs vars; };
         modules = [
           ./configuration.nix
           niri-flake.nixosModules.niri

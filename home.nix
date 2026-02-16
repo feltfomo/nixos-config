@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  vars,
+  ...
+}:
 {
   imports = [
     ./modules/home/theme.nix
@@ -25,8 +31,8 @@
   ];
 
   home = {
-    username = "zynth";
-    homeDirectory = "/home/zynth";
+    username = vars.username;
+    homeDirectory = vars.homeDirectory;
     stateVersion = "25.11";
     sessionVariables = {
       LD_LIBRARY_PATH = "/run/opengl-driver/lib:$LD_LIBRARY_PATH";

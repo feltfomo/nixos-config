@@ -1,13 +1,18 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  vars,
+  ...
+}:
 {
   # Locale
-  time.timeZone = "America/Los_Angeles";
-  i18n.defaultLocale = "en_US.UTF-8";
+  time.timeZone = vars.timezone;
+  i18n.defaultLocale = vars.locale;
 
   # User
-  users.users.zynth = {
+  users.users.${vars.username} = {
     isNormalUser = true;
-    description = "zynth";
+    description = vars.username;
     extraGroups = [
       "networkmanager"
       "wheel"
