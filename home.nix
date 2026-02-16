@@ -14,6 +14,7 @@
     ./modules/home/btop.nix
     ./modules/home/prismlauncher.nix
     ./modules/home/equibop.nix
+    ./modules/home/rofi.nix
     inputs.noctalia-shell.homeModules.default
     inputs.dms.homeModules.dank-material-shell
     inputs.zen-browser.homeModules.twilight
