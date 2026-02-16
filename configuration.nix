@@ -12,7 +12,7 @@
     ./modules/system/programs.nix
     ./modules/system/fonts.nix
     ./modules/system/overlays.nix
-    ./modules/sysetm/thunar.nix
+    ./modules/system/thunar.nix
 
     inputs.silentSDDM.nixosModules.default
   ];
