@@ -11,6 +11,9 @@
     # Editors
     vscodium
 
+    # Terminal
+    microfetch
+
     # Browsers
     firefox
     floorp-bin
