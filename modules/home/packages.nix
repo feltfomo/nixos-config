@@ -19,7 +19,6 @@
     floorp-bin
 
     # File managers
-    thunar
     yazi
     nautilus
     kdePackages.dolphin
@@ -58,7 +57,6 @@
     appimage-run
     ayugram-desktop
     desktop-file-utils
-    rofi
     xwayland-satellite
 
     # Qt theming
