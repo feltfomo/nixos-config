@@ -21,9 +21,7 @@ in
     # "niri/colors.kdl".source = "${kdlDir}/colors.kdl";
   };
 
-  # mpvpaper and swww are used in the KDL config, make sure they're available
   home.packages = with pkgs; [
-    mpvpaper
     swww
   ];
 }

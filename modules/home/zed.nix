@@ -13,7 +13,6 @@
         light = "One Light";
         dark = "Catppuccin Mocha";
       };
-      vim_mode = true;
       autosave = "on_focus_change";
       format_on_save = "on";
       tab_size = 2;
@@ -21,6 +20,15 @@
       inlay_hints = {
         enabled = true;
       };
+      session = {
+        trust_all_worktrees = true;
+      };
     };
   };
+
+  home.packages = [
+    (pkgs.writeShellScriptBin "zed" ''
+      WAYLAND_DISPLAY="" exec ${config.programs.zed-editor.package}/bin/zeditor "$@"
+    '')
+  ];
 }
