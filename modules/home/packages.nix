@@ -13,6 +13,7 @@
 
     # Terminal
     microfetch
+    warp-terminal
 
     # Browsers
     firefox
