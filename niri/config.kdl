@@ -1,10 +1,17 @@
 prefer-no-csd
-spawn-at-startup "mpvpaper" "-o" "no-audio loop" "*" "/home/zynth/Downloads/night-city-pixel-moewalls-com.mp4"
+
+spawn-at-startup "swww" "img" "/home/zynth/wallpaper-night-city.gif"
+
 hotkey-overlay {
 }
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 animations {
 }
+
+binds {
+    Super+Shift+S { spawn-sh "grim -g \"$(slurp)\" /tmp/satty.png && satty -f /tmp/satty.png"; }
+}
+
 include "layout.kdl"
 include "decoration.kdl"
 include "overview-wallpaper.kdl"
@@ -14,3 +21,4 @@ include "dms/binds.kdl"
 include "dms/cursor.kdl"
 include "dms/outputs.kdl"
 include "dms/colors.kdl"
+
