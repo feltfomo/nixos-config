@@ -1,0 +1,17 @@
+spawn-at-startup "swww-daemon"
+spawn-at-startup "swww" "img" "/home/zynth/Downloads/Blur_wallhaven-q2pxml.png" "--outputs" "" // swww-daemon should already be running via mpvpaper setup
+
+layer-rule {
+    match namespace="^swww-daemon$"
+    place-within-backdrop true
+}
+
+layout {
+    background-color "transparent"
+}
+
+overview {
+    workspace-shadow {
+        off
+    }
+}
