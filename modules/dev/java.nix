@@ -59,7 +59,6 @@ pkgs.mkShell {
     export JAVA_HOME=${pkgs.jetbrains.jdk}
     export WAYLAND_DISPLAY=''${WAYLAND_DISPLAY:-wayland-1}
     export XDG_RUNTIME_DIR=''${XDG_RUNTIME_DIR:-/run/user/1000}
-    unset DISPLAY
     export LD_LIBRARY_PATH="${
       pkgs.lib.makeLibraryPath (
         with pkgs;

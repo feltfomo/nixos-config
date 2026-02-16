@@ -9,6 +9,7 @@
 
     # Editors
     vscodium
+    code-cursor
 
     # Terminal
     microfetch
@@ -46,7 +47,7 @@
     nix-direnv
     (pkgs.writeShellScriptBin "idea" ''
       exec nix-shell --expr 'import /etc/nixos/modules/dev/java.nix { pkgs = import <nixpkgs> {}; }' \
-        --run "DISPLAY=:0 WAYLAND_DISPLAY=wayland-1 GDK_BACKEND=wayland QT_QPA_PLATFORM=wayland _JAVA_AWT_WM_NONREPARENTING=1 idea-oss $@"
+        --run "DISPLAY=:0 WAYLAND_DISPLAY=wayland-1 GDK_BACKEND=wayland QT_QPA_PLATFORM=wayland _JAVA_AWT_WM_NONREPARENTING=1 IDEA_JVM_ARGS='-Dawt.toolkit.name=WLToolkit' idea-oss $@"
     '')
 
     # Note Taking
