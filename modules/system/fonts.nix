@@ -18,8 +18,14 @@
 
   fonts.fontconfig.defaultFonts = {
     serif = [ "Noto Serif" ];
-    sansSerif = [ "Inter" "Noto Sans" ];
-    monospace = [ "JetBrainsMono Nerd Font" "DejaVu Sans Mono" ];
+    sansSerif = [
+      "Inter"
+      "Noto Sans"
+    ];
+    monospace = [
+      "JetBrainsMono Nerd Font"
+      "DejaVu Sans Mono"
+    ];
     emoji = [ "Noto Color Emoji" ];
   };
 }

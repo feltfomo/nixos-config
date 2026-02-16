@@ -5,18 +5,18 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    
+
     # LazyVim dependencies
     extraPackages = with pkgs; [
       # LSP servers
       lua-language-server
-      nil  # Nix LSP
-      
+      nil # Nix LSP
+
       # Build tools
       gcc
       gnumake
       unzip
-      
+
       # CLI tools LazyVim uses
       ripgrep
       fd

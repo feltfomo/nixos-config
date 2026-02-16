@@ -19,7 +19,10 @@
   systemd.services.ckb-next-daemon = {
     description = "Corsair Keyboard Daemon (ckb-next)";
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" "systemd-udev-settle.service" ];
+    after = [
+      "network.target"
+      "systemd-udev-settle.service"
+    ];
     requires = [ "systemd-udev-settle.service" ];
     serviceConfig = {
       Type = "simple";

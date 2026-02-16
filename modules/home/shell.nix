@@ -26,17 +26,17 @@
         lt = "eza --tree --icons --group-directories-first";
         cat = "bat --style=auto";
         cd = "z";
-        
+
         # Git shortcuts
         gs = "git status";
         ga = "git add";
         gc = "git commit";
         gp = "git push";
-        
+
         # NixOS shortcuts
         update = "sudo nixos-rebuild switch --flake /etc/nixos#fomonix";
         clean = "sudo nix-collect-garbage -d";
-        
+
         # System
         top = "btop";
         du = "dust";
