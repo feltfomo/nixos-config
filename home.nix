@@ -13,8 +13,7 @@
     ./modules/home/dms.nix
     ./modules/home/neovim.nix
     ./modules/home/spicetify.nix
-    ./modules/home/zen-browser.nix
-    ./modules/home/floorp.nix
+    ./modules/home/browsers.nix
     ./modules/home/niri.nix
     ./modules/home/kitty.nix
     ./modules/home/fastfetch.nix

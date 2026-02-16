@@ -1,5 +1,11 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 let
+  # Floorp Paneru theme
   floorpProfile = ".floorp/kyastyyk.default";
   paneruRepo = pkgs.fetchFromGitHub {
     owner = "TheBigWazz";
@@ -14,6 +20,10 @@ let
   '';
 in
 {
+  # Zen Browser
+  programs.zen-browser.enable = true;
+
+  # Floorp with Paneru theme
   home.file."${floorpProfile}/chrome" = {
     source = paneruPatched;
     recursive = true;
