@@ -78,34 +78,6 @@
               systemd.user.startServices = "sd-switch";
             };
           }
-          {
-            programs.niri = {
-              enable = true;
-              package = pkgs.niri.overrideAttrs (old: {
-                src = inputs.niri-blur;
-                cargoHash = null;
-                cargoDeps = pkgs.rustPlatform.importCargoLock {
-                  lockFile = "${inputs.niri-blur}/Cargo.lock";
-                  allowBuiltinFetchGit = true;
-                };
-                doCheck = false;
-                doInstallCheck = false;
-              });
-            };
-          }
-          # --- walker binary cache ---
-          {
-            nix.settings = {
-              extra-substituters = [
-                "https://walker.cachix.org"
-                "https://walker-git.cachix.org"
-              ];
-              extra-trusted-public-keys = [
-                "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
-                "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
-              ];
-            };
-          }
         ];
       };
 

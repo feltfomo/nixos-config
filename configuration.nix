@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   imports = [
     ./hardware-configuration.nix
@@ -13,6 +18,7 @@
     ./modules/system/fonts.nix
     ./modules/system/overlays.nix
     ./modules/system/thunar.nix
+    ./modules/system/nix-settings.nix
 
     inputs.silentSDDM.nixosModules.default
   ];
@@ -40,12 +46,14 @@
   users.users.zynth = {
     isNormalUser = true;
     description = "zynth";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "video"
+      "audio"
+    ];
     shell = pkgs.zsh;
   };
-
-  # Nix settings
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   system.stateVersion = "25.11";
 }
