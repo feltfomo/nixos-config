@@ -20,13 +20,10 @@
     ./modules/system/thunar.nix
     ./modules/system/nix-settings.nix
     ./modules/system/home-manager.nix
+    ./modules/system/user.nix
 
     inputs.silentSDDM.nixosModules.default
   ];
-
-  # Locale
-  time.timeZone = "America/Los_Angeles";
-  i18n.defaultLocale = "en_US.UTF-8";
 
   # Services
   services = {
@@ -41,19 +38,6 @@
     profileIcons = {
       zynth = "/home/zynth/Pictures/avatar.jpg";
     };
-  };
-
-  # User
-  users.users.zynth = {
-    isNormalUser = true;
-    description = "zynth";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "video"
-      "audio"
-    ];
-    shell = pkgs.zsh;
   };
 
   system.stateVersion = "25.11";
