@@ -4,7 +4,6 @@
     # Modern CLI replacements
     ripgrep
     fd
-    btop
     dust
     duf
 
