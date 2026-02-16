@@ -53,7 +53,7 @@
       noctalia-shell,
       zen-browser,
       niri-flake,
-      walker, # added
+      walker,
       ...
     }@inputs:
     let

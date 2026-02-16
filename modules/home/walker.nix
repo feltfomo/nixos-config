@@ -194,17 +194,17 @@
           }
 
           .box-wrapper {
-            background: #1e1e2e;
+            background: alpha(#1e1e2e, 0.3);
             padding: 12px;
             border-radius: 20px;
             border: 2px solid #cba6f7;
             box-shadow:
               0 19px 38px rgba(0, 0, 0, 0.3),
               0 15px 12px rgba(0, 0, 0, 0.22);
-          }
+            }
 
           .box {
-            background: #181825;
+            background: alpha(#181825, 0.3);
             padding: 20px;
             border-radius: 20px;
             border: 2px solid #313244;

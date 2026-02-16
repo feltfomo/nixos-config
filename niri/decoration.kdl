@@ -5,29 +5,17 @@ layout {
     active-color "#cba6f7"
     inactive-color "#1e1e2e"
   }
-
   focus-ring {
     off
   }
-
   shadow {
     on
     softness 30
     draw-behind-window true
   }
-
   blur {
     noise 0.05
     passes 3
     radius 10
-    ignore-alpha 0.8
   }
-
-}
-
-window-rule {
-    blur {
-        on
-    }
-    opacity 0.7
 }

@@ -1,28 +1,15 @@
 prefer-no-csd
-
 spawn-at-startup "mpvpaper" "-o" "no-audio loop" "*" "/home/zynth/Downloads/night-city-pixel-moewalls-com.mp4"
-
 hotkey-overlay {
 }
-
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-
 animations {
 }
-
-window-rule {
-    geometry-corner-radius 12
-    clip-to-geometry true
-    draw-border-with-background false
-}
-
-
 include "layout.kdl"
 include "decoration.kdl"
 include "overview-wallpaper.kdl"
 include "window-rule.kdl"
 include "input.kdl"
-
 include "dms/binds.kdl"
 include "dms/cursor.kdl"
 include "dms/outputs.kdl"
