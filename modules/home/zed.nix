@@ -2,6 +2,7 @@
 {
   programs.zed-editor = {
     enable = true;
+    mutableUserSettings = false;
     userSettings = {
       icon_theme = "Catppuccin Mocha";
       ui_font_size = 16;
