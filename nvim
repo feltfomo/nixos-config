@@ -1,6 +1,0 @@
-tools/orchestrator/target/
-result
-result-*
-.direnv/
-*.age
-.DS_Store
