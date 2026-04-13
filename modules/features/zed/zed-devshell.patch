@@ -1,0 +1,20 @@
+--- a/crates/terminal/src/terminal.rs
++++ b/crates/terminal/src/terminal.rs
+@@ -466,6 +466,17 @@
+ 
+             insert_zed_terminal_env(&mut env, &version);
+ 
++            // If ZED_DEVSHELL is set in the environment (baked in via wrapper),
++            // use it as the activation script unless a task already provided one.
++            let activation_script = if activation_script.is_empty() {
++                match std::env::var("ZED_DEVSHELL") {
++                    Ok(cmd) if !cmd.trim().is_empty() => vec![cmd],
++                    _ => Vec::new(),
++                }
++            } else {
++                activation_script
++            };
++
+             #[derive(Default)]
+             struct ShellParams {
+                 program: String,

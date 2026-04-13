@@ -1,0 +1,17 @@
+# fomonix zed profile registry
+# Used by zed.nix to auto-generate wrapper binaries and desktop entries.
+# Add a profile here, then rebuild for Nix to pick it up.
+#
+# Fields:
+#   name       profile name — drives binary name (zeditor-<n>),
+#              data dir (~/.local/share/zed-<n>), and desktop entry
+#   devshell   shell command run in every new terminal (via ZED_DEVSHELL)
+#   extra_path optional list of paths prepended to PATH in the wrapper
+#   lsp_binary optional path to LSP server binary
+#   lsp_args   optional args passed to lsp_binary
+# laifjhl;akjtg;akjh
+
+[[profile]]
+name       = "rust"
+devshell   = "nix develop /etc/nixos#rust"
+extra_path = ["/home/feltfomo/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin"]

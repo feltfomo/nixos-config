@@ -1,0 +1,51 @@
+# fomonix package registry
+# Used by `fomonix update-pkg <n>` to fetch and patch managed packages.
+# No rebuild needed when adding or editing entries here.
+#
+# source = "github"    → fetches latest from GitHub releases API
+# source = "jetbrains" → fetches latest from JetBrains releases API
+#
+# GitHub fields:
+#   repo           "owner/repo"
+#   asset          asset filename, VERSION token is replaced with the tag
+#   strip_v        if true, strips leading "v" from tag before substituting
+#                  into asset name (e.g. tag "v3.1.9" → "3.1.9" in filename)
+#
+# JetBrains fields:
+#   product_code           JetBrains product code (e.g. "IIC" for IDEA Community)
+#   download_url_template  full download URL with VERSION token
+
+[[package]]
+name = "mcsr"
+pkg_nix = "modules/features/mcsr/_mcsr-pkg.nix"
+prefetch_name = "MCSRLauncher.jar"
+source = "github"
+repo = "MCSRLauncher/Launcher"
+asset = "MCSRLauncher.jar"
+strip_v = false
+
+[[package]]
+name = "equibop"
+pkg_nix = "modules/features/equibop/_equibop-pkg.nix"
+prefetch_name = "equibop.tar.gz"
+source = "github"
+repo = "Equicord/Equibop"
+asset = "equibop-VERSION.tar.gz"
+strip_v = true
+
+[[package]]
+name = "idea"
+pkg_nix = "modules/dev/_idea-pkg.nix"
+prefetch_name = "ideaIC.tar.gz"
+source = "jetbrains"
+product_code = "IIC"
+download_url_template = "https://download.jetbrains.com/idea/ideaIC-VERSION.tar.gz"
+
+[[package]]
+name = "prism"
+pkg_nix = "modules/features/prism/_prism-pkg.nix"
+prefetch_name = "prismlauncher.tar.gz"
+source = "github"
+repo = "PrismLauncher/PrismLauncher"
+asset = "PrismLauncher-Linux-Qt6-Portable-VERSION.tar.gz"
+strip_v = false

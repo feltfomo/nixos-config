@@ -1,0 +1,18 @@
+[package]
+name = "orchestrator"
+version = "0.2.0"
+edition = "2021"
+
+[[bin]]
+name = "fomonix"
+path = "src/main.rs"
+
+[dependencies]
+clap         = { version = "4", features = ["derive"] }
+ratatui      = "0.29"
+crossterm    = "0.28"
+portable-pty = "0.8"
+tui-term     = "0.2"
+vt100        = "0.15"
+toml         = "0.8"
+serde        = { version = "1", features = ["derive"] }
