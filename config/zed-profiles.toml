@@ -9,9 +9,10 @@
 #   extra_path optional list of paths prepended to PATH in the wrapper
 #   lsp_binary optional path to LSP server binary
 #   lsp_args   optional args passed to lsp_binary
-# laifjhl;akjtg;akjh
 
 [[profile]]
-name       = "rust"
-devshell   = "nix develop /etc/nixos#rust"
-extra_path = ["/home/feltfomo/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin"]
+name = "rust"
+devshell = "nix develop /etc/nixos#rust"
+extra_path = [
+  "/home/feltfomo/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin",
+]
