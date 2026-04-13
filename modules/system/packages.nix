@@ -10,7 +10,6 @@
         grimblast
         satty
         wl-clipboard
-        ghostty
         nixfmt
         stylua
         jq
