@@ -1,6 +1,8 @@
 { ... }:
-let vars = import ./../_config.nix;
-in {
+let
+  vars = import ./../_config.nix;
+in
+{
   flake.nixosModules.impermanence = {
     boot.initrd.systemd.enable = true;
     boot.initrd.systemd.services.wipe-root = {
@@ -12,17 +14,13 @@ in {
       serviceConfig.Type = "oneshot";
       script = ''
         mkdir -p /mnt
-
         mount -o subvol=/ /dev/disk/by-uuid/759ce480-777a-455e-98c9-e0009ee31f8b /mnt
-
         if [ -e /mnt/@old ]; then
           btrfs subvolume delete /mnt/@old
         fi
-
         btrfs subvolume snapshot /mnt/@ /mnt/@old
         btrfs subvolume delete /mnt/@
         btrfs subvolume snapshot /mnt/@blank /mnt/@
-
         umount /mnt
       '';
     };

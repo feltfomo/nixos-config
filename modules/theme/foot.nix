@@ -67,6 +67,7 @@
         inherit pkgs;
         package = pkgs.foot;
         flags."-c" = "${footConfHyprland}";
+        flags."-e" = "${pkgs.nushell}/bin/nu";
       };
     };
 }

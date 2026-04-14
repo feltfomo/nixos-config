@@ -5,11 +5,11 @@
     {
       environment.systemPackages = with pkgs; [
         git
-        nushell
         socat
         grimblast
         satty
         wl-clipboard
+        cliphist
         nixfmt
         stylua
         jq
