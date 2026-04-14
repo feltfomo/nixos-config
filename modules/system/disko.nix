@@ -38,6 +38,7 @@
           "compress=zstd"
           "noatime"
         ];
+        neededForBoot = true;
       };
       "/boot" = {
         device = "/dev/disk/by-uuid/F442-EF75";
@@ -45,7 +46,6 @@
         options = [ "umask=0077" ];
       };
     };
-
     swapDevices = [
       { device = "/dev/disk/by-uuid/02a6abfd-9d76-4ddc-ae20-dc028580c206"; }
     ];
