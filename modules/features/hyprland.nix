@@ -1,4 +1,7 @@
 { inputs, self, ... }:
+let
+  vars = import ./../_config.nix;
+in
 {
   flake.nixosModules.hyprland =
     { pkgs, ... }:
@@ -43,6 +46,11 @@
       ...
     }:
     let
+      theme = import ./../theme/_theme.nix { inherit pkgs; };
+
+      pm = vars.monitors.primary;
+      sm = vars.monitors.secondary;
+
       workspaceScript = pkgs.writeScript "hypr-workspace.nu" ''
         #!/usr/bin/env nu
 
@@ -54,7 +62,7 @@
             ($cursor.x >= $m.x) and ($cursor.x < ($m.x + $m.width)) and ($cursor.y >= $m.y) and ($cursor.y < ($m.y + $m.height))
           } | first)
 
-          let workspace = if $active_monitor.name == "DP-2" {
+          let workspace = if $active_monitor.name == "${sm.name}" {
             $num + 10
           } else {
             $num
@@ -75,7 +83,7 @@
             ($cursor.x >= $m.x) and ($cursor.x < ($m.x + $m.width)) and ($cursor.y >= $m.y) and ($cursor.y < ($m.y + $m.height))
           } | first)
 
-          let workspace = if $active_monitor.name == "DP-2" {
+          let workspace = if $active_monitor.name == "${sm.name}" {
             $num + 10
           } else {
             $num
@@ -88,7 +96,7 @@
       submapDaemon = pkgs.writeScript "hypr-submap-daemon.nu" ''
         #!/usr/bin/env nu
 
-        let socket = $"/run/user/1000/hypr/($env.HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock"
+        let socket = $"($env.XDG_RUNTIME_DIR)/hypr/($env.HYPRLAND_INSTANCE_SIGNATURE)/.socket2.sock"
 
         ^socat -U - $"UNIX-CONNECT:($socket)" | lines | each {|line|
           if ($line | str starts-with "submap>>") {
@@ -118,11 +126,11 @@
         env = ELECTRON_OZONE_PLATFORM_HINT,auto
 
         # cursor
-        env = XCURSOR_THEME,BreezeX-RosePine-Linux
-        env = XCURSOR_SIZE,24
+        env = XCURSOR_THEME,${theme.cursor.name}
+        env = XCURSOR_SIZE,${toString theme.cursor.size}
 
-        monitor = DP-1,2560x1440@180,0x0,1
-        monitor = DP-2,2560x1440@180,2560x0,1
+        monitor = ${pm.name},${pm.res}@${toString pm.refreshRate},${toString pm.x}x${toString pm.y},1
+        monitor = ${sm.name},${sm.res}@${toString sm.refreshRate},${toString sm.x}x${toString sm.y},1
 
         exec-once = ${lib.getExe self'.packages.myNoctaliaHyprland}
         exec-once = nu ${submapDaemon}
@@ -144,8 +152,8 @@
         }
 
         decoration {
-          active_opacity = 0.9
-          inactive_opacity = 0.9
+          active_opacity = ${toString theme.opacity.windows}
+          inactive_opacity = ${toString theme.opacity.windows}
           rounding = 10
           blur {
             enabled = true
@@ -185,27 +193,27 @@
           disable_splash_rendering = true
         }
 
-        # workspace assignments — DP-1 owns 1-10, DP-2 owns 11-20
-        workspace = 1, monitor:DP-1
-        workspace = 2, monitor:DP-1
-        workspace = 3, monitor:DP-1
-        workspace = 4, monitor:DP-1
-        workspace = 5, monitor:DP-1
-        workspace = 6, monitor:DP-1
-        workspace = 7, monitor:DP-1
-        workspace = 8, monitor:DP-1
-        workspace = 9, monitor:DP-1
-        workspace = 10, monitor:DP-1
-        workspace = 11, monitor:DP-2
-        workspace = 12, monitor:DP-2
-        workspace = 13, monitor:DP-2
-        workspace = 14, monitor:DP-2
-        workspace = 15, monitor:DP-2
-        workspace = 16, monitor:DP-2
-        workspace = 17, monitor:DP-2
-        workspace = 18, monitor:DP-2
-        workspace = 19, monitor:DP-2
-        workspace = 20, monitor:DP-2
+        # workspace assignments — ${pm.name} owns 1-10, ${sm.name} owns 11-20
+        workspace = 1,  monitor:${pm.name}
+        workspace = 2,  monitor:${pm.name}
+        workspace = 3,  monitor:${pm.name}
+        workspace = 4,  monitor:${pm.name}
+        workspace = 5,  monitor:${pm.name}
+        workspace = 6,  monitor:${pm.name}
+        workspace = 7,  monitor:${pm.name}
+        workspace = 8,  monitor:${pm.name}
+        workspace = 9,  monitor:${pm.name}
+        workspace = 10, monitor:${pm.name}
+        workspace = 11, monitor:${sm.name}
+        workspace = 12, monitor:${sm.name}
+        workspace = 13, monitor:${sm.name}
+        workspace = 14, monitor:${sm.name}
+        workspace = 15, monitor:${sm.name}
+        workspace = 16, monitor:${sm.name}
+        workspace = 17, monitor:${sm.name}
+        workspace = 18, monitor:${sm.name}
+        workspace = 19, monitor:${sm.name}
+        workspace = 20, monitor:${sm.name}
 
         # apps
         bind = SUPER, T, exec, ${lib.getExe self'.packages.myKittyHyprland}

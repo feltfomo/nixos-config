@@ -1,6 +1,8 @@
 { ... }:
 let
   vars = import ./../_config.nix;
+  # Systemd unit name encoding: hyphens in UUIDs become \x2d in device unit names.
+  rootUuidEscaped = builtins.replaceStrings [ "-" ] [ "\\x2d" ] vars.disk.rootUuid;
 in
 {
   flake.nixosModules.impermanence = {
@@ -8,13 +10,13 @@ in
     boot.initrd.systemd.services.wipe-root = {
       description = "Wipe / on boot via btrfs snapshot restore";
       wantedBy = [ "initrd.target" ];
-      after = [ "dev-disk-by\\x2duuid-759ce480\\x2d777a\\x2d455e\\x2d98c9\\x2de0009ee31f8b.device" ];
+      after = [ "dev-disk-by\\x2duuid-${rootUuidEscaped}.device" ];
       before = [ "sysroot.mount" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig.Type = "oneshot";
       script = ''
         mkdir -p /mnt
-        mount -o subvol=/ /dev/disk/by-uuid/759ce480-777a-455e-98c9-e0009ee31f8b /mnt
+        mount -o subvol=/ /dev/disk/by-uuid/${vars.disk.rootUuid} /mnt
         if [ -e /mnt/@old ]; then
           btrfs subvolume delete /mnt/@old
         fi

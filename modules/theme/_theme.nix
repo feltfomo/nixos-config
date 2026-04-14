@@ -1,4 +1,5 @@
-{ pkgs }: {
+{ pkgs }:
+{
   colors = {
     base = "#191724";
     surface = "#1f1d2e";
@@ -13,10 +14,42 @@
     foam = "#9ccfd8";
     iris = "#c4a7e7";
   };
-  cursor = { package = pkgs.rose-pine-cursor; name = "BreezeX-RosePine-Linux"; size = 24; };
-  gtk = { package = pkgs.rose-pine-gtk-theme; name = "rose-pine-gtk"; };
-  icons = { package = pkgs.rose-pine-icon-theme; name = "rose-pine-icons"; };
-  qt = { package = pkgs.rose-pine-kvantum; };
-  font = { package = pkgs.nerd-fonts.jetbrains-mono; name = "JetBrainsMono Nerd Font"; };
-  sansFont = { package = pkgs.noto-fonts; name = "Noto Sans"; };
+
+  cursor = {
+    package = pkgs.rose-pine-cursor;
+    name = "BreezeX-RosePine-Linux";
+    size = 24;
+  };
+  gtk = {
+    package = pkgs.rose-pine-gtk-theme;
+    name = "rose-pine-gtk";
+  };
+  icons = {
+    package = pkgs.rose-pine-icon-theme;
+    name = "rose-pine-icons";
+  };
+  qt = {
+    package = pkgs.rose-pine-kvantum;
+  };
+  font = {
+    package = pkgs.nerd-fonts.jetbrains-mono;
+    name = "JetBrainsMono Nerd Font";
+  };
+  sansFont = {
+    package = pkgs.noto-fonts;
+    name = "Noto Sans";
+  };
+
+  # Font sizes
+  fontSize = {
+    terminal = 12; # kitty, foot, ghostty
+    zedBuffer = 14;
+    zedUi = 16;
+  };
+
+  # Opacity values
+  opacity = {
+    terminal = 0.9; # kitty, ghostty background
+    windows = 0.9; # hyprland active/inactive window opacity
+  };
 }

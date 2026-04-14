@@ -1,4 +1,7 @@
 { inputs, self, ... }:
+let
+  vars = import ./../_config.nix;
+in
 {
   flake.nixosModules.footNiri =
     { pkgs, ... }:
@@ -22,7 +25,7 @@
       theme = import ./_theme.nix { inherit pkgs; };
       baseConf = ''
         [main]
-        font=${theme.font.name}:size=12
+        font=${theme.font.name}:size=${toString theme.fontSize.terminal}
 
         [colors]
         foreground=${builtins.substring 1 6 theme.colors.text}
@@ -51,10 +54,10 @@
       footConfNiri = pkgs.writeText "foot.ini" baseConf;
       footConfHyprland = pkgs.writeText "foot.ini" ''
         # colors managed at runtime by noctalia matugen
-        include=/home/feltfomo/.config/foot/noctalia-colors.ini
+        include=${vars.home}/.config/foot/noctalia-colors.ini
 
         [main]
-        font=${theme.font.name}:size=12
+        font=${theme.font.name}:size=${toString theme.fontSize.terminal}
       '';
     in
     {

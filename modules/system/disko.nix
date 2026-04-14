@@ -1,9 +1,12 @@
 { ... }:
+let
+  vars = import ./../_config.nix;
+in
 {
   flake.nixosModules.disko = {
     fileSystems = {
       "/" = {
-        device = "/dev/disk/by-uuid/759ce480-777a-455e-98c9-e0009ee31f8b";
+        device = "/dev/disk/by-uuid/${vars.disk.rootUuid}";
         fsType = "btrfs";
         options = [
           "subvol=@"
@@ -12,7 +15,7 @@
         ];
       };
       "/nix" = {
-        device = "/dev/disk/by-uuid/759ce480-777a-455e-98c9-e0009ee31f8b";
+        device = "/dev/disk/by-uuid/${vars.disk.rootUuid}";
         fsType = "btrfs";
         options = [
           "subvol=@nix"
@@ -21,7 +24,7 @@
         ];
       };
       "/persist" = {
-        device = "/dev/disk/by-uuid/759ce480-777a-455e-98c9-e0009ee31f8b";
+        device = "/dev/disk/by-uuid/${vars.disk.rootUuid}";
         fsType = "btrfs";
         options = [
           "subvol=@persist"
@@ -31,7 +34,7 @@
         neededForBoot = true;
       };
       "/home" = {
-        device = "/dev/disk/by-uuid/759ce480-777a-455e-98c9-e0009ee31f8b";
+        device = "/dev/disk/by-uuid/${vars.disk.rootUuid}";
         fsType = "btrfs";
         options = [
           "subvol=@home"
@@ -41,13 +44,13 @@
         neededForBoot = true;
       };
       "/boot" = {
-        device = "/dev/disk/by-uuid/F442-EF75";
+        device = "/dev/disk/by-uuid/${vars.disk.bootUuid}";
         fsType = "vfat";
         options = [ "umask=0077" ];
       };
     };
     swapDevices = [
-      { device = "/dev/disk/by-uuid/02a6abfd-9d76-4ddc-ae20-dc028580c206"; }
+      { device = "/dev/disk/by-uuid/${vars.disk.swapUuid}"; }
     ];
   };
 }

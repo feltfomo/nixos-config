@@ -16,8 +16,8 @@ in
           in
           ''
             font-family = ${theme.font.name}
-            font-size = 12
-            background-opacity = 0.9
+            font-size = ${toString theme.fontSize.terminal}
+            background-opacity = ${toString theme.opacity.terminal}
             foreground = ${builtins.substring 1 6 theme.colors.text}
             background = ${builtins.substring 1 6 theme.colors.base}
             selection-foreground = ${builtins.substring 1 6 theme.colors.text}
@@ -57,9 +57,9 @@ in
           in
           ''
             font-family = ${theme.font.name}
-            font-size = 12
-            background-opacity = 0.9
-            config-file = /home/${vars.username}/.config/ghostty/noctalia-colors
+            font-size = ${toString theme.fontSize.terminal}
+            background-opacity = ${toString theme.opacity.terminal}
+            config-file = ${vars.home}/.config/ghostty/noctalia-colors
           '';
       };
     };
