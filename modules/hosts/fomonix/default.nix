@@ -63,7 +63,7 @@ in
   flake.nixosConfigurations.fomonix = inputs.nixpkgs.lib.nixosSystem {
     modules = commonModules ++ [
       self.nixosModules.niri
-      self.nixosModules.noctaliaConfigNiri
+      self.nixosModules.dmsConfigNiri   # replaces noctaliaConfigNiri
       self.nixosModules.kittyNiri
       self.nixosModules.ghosttyNiri
       self.nixosModules.footNiri

@@ -52,90 +52,19 @@
     };
   };
 
-  # niri: static rose-pine
+  # niri: reactive DMS matugen colors
   flake.nixosModules.nixvimNiri = {
-    programs.nixvim = {
-      colorschemes.rose-pine = {
-        enable = true;
-        settings.variant = "main";
-      };
-      plugins.lualine.settings.options.theme = {
-        normal = {
-          a = {
-            fg = "#191724";
-            bg = "#31748f";
-            gui = "bold";
-          };
-          b = {
-            fg = "#e0def4";
-            bg = "#26233a";
-          };
-          c = {
-            fg = "#e0def4";
-            bg = "#191724";
-          };
-        };
-        insert = {
-          a = {
-            fg = "#191724";
-            bg = "#9ccfd8";
-            gui = "bold";
-          };
-          b = {
-            fg = "#e0def4";
-            bg = "#26233a";
-          };
-          c = {
-            fg = "#e0def4";
-            bg = "#191724";
-          };
-        };
-        visual = {
-          a = {
-            fg = "#191724";
-            bg = "#c4a7e7";
-            gui = "bold";
-          };
-          b = {
-            fg = "#e0def4";
-            bg = "#26233a";
-          };
-          c = {
-            fg = "#e0def4";
-            bg = "#191724";
-          };
-        };
-        replace = {
-          a = {
-            fg = "#191724";
-            bg = "#eb6f92";
-            gui = "bold";
-          };
-          b = {
-            fg = "#e0def4";
-            bg = "#26233a";
-          };
-          c = {
-            fg = "#e0def4";
-            bg = "#191724";
-          };
-        };
-        inactive = {
-          a = {
-            fg = "#6e6a86";
-            bg = "#191724";
-          };
-          b = {
-            fg = "#6e6a86";
-            bg = "#191724";
-          };
-          c = {
-            fg = "#6e6a86";
-            bg = "#191724";
-          };
-        };
-      };
-    };
+    programs.nixvim.extraConfigLuaPre = ''
+      local function safe_dofile(path)
+        local expanded = vim.fn.expand(path)
+        if vim.fn.filereadable(expanded) == 1 then
+          dofile(expanded)
+        end
+      end
+
+      safe_dofile("~/.config/nvim/nvim-dms-colors.lua")
+      safe_dofile("~/.config/nvim/lualine-dms-colors.lua")
+    '';
   };
 
   # hyprland: matugen reactive

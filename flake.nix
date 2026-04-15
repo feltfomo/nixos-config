@@ -3,13 +3,11 @@
   nixConfig = {
     extra-substituters = [
       "https://cache.lix.systems"
-      "https://noctalia.cachix.org"
       "https://niri.cachix.org"
       "https://helix.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.lix.systems-1:aBnZUw8zA7H35Cz2RyKFVs3H4PlpTLyLSRsKw0UFZPE="
-      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
       "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
       "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
     ];
@@ -45,8 +43,15 @@
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Naxdy's niri fork — has blur with ignore-alpha support
     niri = {
-      url = "github:sodiboo/niri-flake";
+      url = "github:Naxdy/niri";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-tracy.follows = "nixpkgs";
+    };
+    # DMS blur branch
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/blur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     silentSDDM = {

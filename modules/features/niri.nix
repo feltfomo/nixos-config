@@ -3,11 +3,31 @@
   flake.nixosModules.niri =
     { pkgs, lib, ... }:
     {
-      # Wrapped niri wins in PATH over the unwrapped one registered by programs.niri.
-      # Wrapped kitty is installed by kittyNiri module.
+      # Enables portals, polkit integration, and registers a wayland session.
+      programs.niri.enable = true;
+
       environment.systemPackages = [
         self.packages.${pkgs.stdenv.hostPlatform.system}.myNiri
         pkgs.nautilus
+      ];
+
+      services.displayManager.sessionPackages = [
+        (pkgs.runCommand "niri-session-desktop"
+          {
+            passthru.providedSessions = [ "niri" ];
+          }
+          ''
+            mkdir -p $out/share/wayland-sessions
+            cat > $out/share/wayland-sessions/niri.desktop <<EOF
+            [Desktop Entry]
+            Name=Niri
+            Comment=A scrollable-tiling Wayland compositor
+            Exec=${self.packages.${pkgs.stdenv.hostPlatform.system}.myNiri}/bin/niri --session
+            Type=Application
+            DesktopNames=niri
+            EOF
+          ''
+        )
       ];
 
       xdg.portal = {
@@ -38,138 +58,246 @@
       ...
     }:
     let
+      vars = import ./../_config.nix;
       theme = import ./../theme/_theme.nix { inherit pkgs; };
+
+      niriConf = pkgs.writeText "niri-config.kdl" ''
+        prefer-no-csd
+
+        xwayland-satellite {
+          path "${pkgs.xwayland-satellite}/bin/xwayland-satellite"
+        }
+
+        environment {
+          XDG_CURRENT_DESKTOP "niri"
+          ELECTRON_OZONE_PLATFORM_HINT "auto"
+        }
+
+        input {
+          keyboard {
+            xkb {
+              layout "us"
+              options "caps:escape"
+            }
+          }
+          touchpad {
+            tap
+            natural-scroll
+          }
+          mouse {
+            accel-profile "flat"
+          }
+          focus-follows-mouse
+          warp-mouse-to-focus
+        }
+
+        gestures {
+          hot-corners {
+            off
+          }
+        }
+
+        cursor {
+          xcursor-theme "${theme.cursor.name}"
+          xcursor-size ${toString theme.cursor.size}
+        }
+
+        layout {
+          gaps 8
+          background-color "transparent"
+          always-center-single-column
+
+          focus-ring {
+            off
+          }
+
+          border {
+            width 2
+            active-color "${theme.colors.love}"
+            inactive-color "${theme.colors.overlay}"
+          }
+
+          blur {
+            passes 4
+            radius 3
+            noise 0.02
+          }
+        }
+
+        window-rule {
+          geometry-corner-radius 12
+          clip-to-geometry true
+        }
+
+        window-rule {
+          match app-id=r#"^org\.gnome\."#
+          draw-border-with-background false
+          geometry-corner-radius 12
+          clip-to-geometry true
+        }
+
+        window-rule {
+          match app-id="com.mitchellh.ghostty"
+          match app-id="kitty"
+          match app-id="foot"
+          match app-id="brave-browser"
+          match app-id="zen-twilight"
+          draw-border-with-background false
+        }
+        window-rule {
+          opacity 0.9
+        }
+
+        // Float quickshell/DMS windows
+        window-rule {
+          match app-id=r#"org\.quickshell$"#
+          open-floating true
+        }
+
+        // Blur all windows
+        window-rule {
+          blur {
+            on
+            x-ray true
+          }
+        }
+
+        layer-rule {
+          match namespace="^dms:.*$"
+          blur {
+            on
+            x-ray false
+            ignore-alpha 0.45
+          }
+        }
+
+        // DMS layer rules
+        layer-rule {
+          match namespace="^quickshell$"
+          place-within-backdrop true
+        }
+
+        // Blur wallpaper layer (DMS blur branch)
+        layer-rule {
+          match namespace="dms:blurwallpaper"
+          place-within-backdrop true
+        }
+
+        // colors managed at runtime by DMS matugen — overrides static border above
+        include "${vars.home}/.config/niri/dms-colors.kdl"
+
+        spawn-at-startup "${dmsBin}" "run"
+
+        binds {
+          // DMS
+          Mod+Space hotkey-overlay-title="Application Launcher" {
+            spawn "dms" "ipc" "call" "spotlight" "toggle";
+          }
+          Mod+C hotkey-overlay-title="Clipboard Manager" {
+            spawn "dms" "ipc" "call" "clipboard" "toggle";
+          }
+          Mod+N hotkey-overlay-title="Notification Center" {
+            spawn "dms" "ipc" "call" "notifications" "toggle";
+          }
+          Mod+Comma hotkey-overlay-title="Settings" {
+            spawn "dms" "ipc" "call" "settings" "focusOrToggle";
+          }
+          Mod+Y hotkey-overlay-title="Browse Wallpapers" {
+            spawn "dms" "ipc" "call" "dankdash" "wallpaper";
+          }
+          Mod+Alt+L hotkey-overlay-title="Lock Screen" {
+            spawn "dms" "ipc" "call" "lock" "lock";
+          }
+
+          // Apps
+          Mod+T { spawn "${lib.getExe self'.packages.myKittyNiri}"; }
+          Mod+W { spawn "${lib.getExe pkgs.firefox}"; }
+
+          // Window management
+          Mod+Q { close-window; }
+          Mod+F { maximize-column; }
+          Mod+Shift+F { fullscreen-window; }
+          Mod+V { toggle-window-floating; }
+          Mod+grave { toggle-overview; }
+
+          // Focus columns
+          Mod+H { focus-column-left; }
+          Mod+L { focus-column-right; }
+          Mod+Left { focus-column-left; }
+          Mod+Right { focus-column-right; }
+
+          // Focus windows within column
+          Mod+J { focus-window-down; }
+          Mod+K { focus-window-up; }
+          Mod+Down { focus-window-down; }
+          Mod+Up { focus-window-up; }
+
+          // Focus workspaces
+          Mod+Shift+J { focus-workspace-down; }
+          Mod+Shift+K { focus-workspace-up; }
+          Mod+Shift+Down { focus-workspace-down; }
+          Mod+Shift+Up { focus-workspace-up; }
+
+          // Focus monitors
+          Mod+Alt+Left { focus-monitor-left; }
+          Mod+Alt+Right { focus-monitor-right; }
+
+          // Move columns
+          Mod+Ctrl+H { move-column-left-or-to-monitor-left; }
+          Mod+Ctrl+L { move-column-right-or-to-monitor-right; }
+          Mod+Ctrl+Left { move-column-left-or-to-monitor-left; }
+          Mod+Ctrl+Right { move-column-right-or-to-monitor-right; }
+
+          // Move windows to workspaces
+          Mod+Ctrl+J { move-window-to-workspace-down; }
+          Mod+Ctrl+K { move-window-to-workspace-up; }
+          Mod+Ctrl+Down { move-window-to-workspace-down; }
+          Mod+Ctrl+Up { move-window-to-workspace-up; }
+
+          // Move to monitors
+          Mod+Shift+Alt+Left { move-window-to-monitor-left; }
+          Mod+Shift+Alt+Right { move-window-to-monitor-right; }
+
+          // Consume/expel
+          Mod+BracketLeft { consume-window-into-column; }
+          Mod+BracketRight { expel-window-from-column; }
+
+          // Resize
+          Mod+Shift+H { set-column-width "-5%"; }
+          Mod+Shift+L { set-column-width "+5%"; }
+          Mod+Shift+Left { set-column-width "-5%"; }
+          Mod+Shift+Right { set-column-width "+5%"; }
+          Mod+Ctrl+Shift+Up { set-window-height "+5%"; }
+          Mod+Ctrl+Shift+Down { set-window-height "-5%"; }
+          
+          // System
+          Mod+Shift+E { quit; }
+          Mod+Shift+P { power-off-monitors; }
+          Print { screenshot; }
+          Ctrl+Print { screenshot-screen; }
+          Alt+Print { screenshot-window; }
+
+          // Volume
+          Mod+Equal allow-when-locked=true {
+            spawn "dms" "ipc" "call" "audio" "increment" "3";
+          }
+          Mod+Minus allow-when-locked=true {
+            spawn "dms" "ipc" "call" "audio" "decrement" "3";
+          }
+          Mod+Shift+M allow-when-locked=true {
+            spawn "dms" "ipc" "call" "audio" "mute";
+          }
+        }      
+      '';
+      dmsBin = "${inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/dms";
     in
     {
-      packages.myNiri = inputs.wrapper-modules.wrappers.niri.wrap {
+      packages.myDms = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+      packages.myNiri = inputs.wrapper-modules.lib.wrapPackage {
         inherit pkgs;
-        v2-settings = true;
-        settings = {
-          prefer-no-csd = _: { };
-          xwayland-satellite.path = "${pkgs.xwayland-satellite}/bin/xwayland-satellite";
-
-          input = {
-            keyboard.xkb = {
-              layout = "us";
-              options = "caps:escape";
-            };
-            touchpad = {
-              tap = _: { };
-              natural-scroll = _: { };
-            };
-            mouse.accel-profile = "flat";
-            focus-follows-mouse = _: { };
-          };
-
-          gestures."hot-corners".off = _: { };
-
-          spawn-at-startup = [
-            [ (lib.getExe self'.packages.myNoctaliaNiri) ]
-          ];
-
-          layout = {
-            gaps = 16;
-            always-center-single-column = _: { };
-            focus-ring = {
-              width = 2;
-              active-color = theme.colors.love;
-              inactive-color = theme.colors.overlay;
-            };
-            border.off = _: { };
-          };
-
-          cursor = {
-            xcursor-theme = theme.cursor.name;
-            xcursor-size = theme.cursor.size;
-          };
-
-          window-rules = [
-            {
-              geometry-corner-radius = 10;
-              clip-to-geometry = true;
-            }
-          ];
-
-          layer-rules = [
-            {
-              matches = [ { namespace = "^noctalia-overview*"; } ];
-              place-within-backdrop = true;
-            }
-          ];
-
-          binds = {
-            # apps
-            "Mod+T".spawn-sh = lib.getExe self'.packages.myKittyNiri;
-            "Mod+W".spawn-sh = lib.getExe pkgs.firefox;
-            "Mod+Space".spawn-sh = "${lib.getExe self'.packages.myNoctaliaNiri} ipc call launcher toggle";
-            "Mod+C".spawn-sh = "${lib.getExe self'.packages.myNoctaliaNiri} ipc call clipboard toggle";
-
-            # window management
-            "Mod+Q".close-window = _: { };
-            "Mod+F".maximize-column = _: { };
-            "Mod+Shift+F".fullscreen-window = _: { };
-            "Mod+V".toggle-window-floating = _: { };
-            "Mod+grave".toggle-overview = _: { };
-
-            # focus columns (left/right within workspace)
-            "Mod+H".focus-column-left = _: { };
-            "Mod+L".focus-column-right = _: { };
-            "Mod+Left".focus-column-left = _: { };
-            "Mod+Right".focus-column-right = _: { };
-
-            # focus workspaces (up/down)
-            "Mod+J".focus-workspace-down = _: { };
-            "Mod+K".focus-workspace-up = _: { };
-            "Mod+Down".focus-workspace-down = _: { };
-            "Mod+Up".focus-workspace-up = _: { };
-
-            # focus monitors
-            "Mod+Alt+Left".focus-monitor-left = _: { };
-            "Mod+Alt+Right".focus-monitor-right = _: { };
-
-            # move columns within workspace
-            "Mod+Shift+H".move-column-left-or-to-monitor-left = _: { };
-            "Mod+Shift+L".move-column-right-or-to-monitor-right = _: { };
-            "Mod+Shift+Left".move-column-left-or-to-monitor-left = _: { };
-            "Mod+Shift+Right".move-column-right-or-to-monitor-right = _: { };
-
-            # move windows between workspaces
-            "Mod+Shift+J".move-window-to-workspace-down = _: { };
-            "Mod+Shift+K".move-window-to-workspace-up = _: { };
-            "Mod+Shift+Down".move-window-to-workspace-down = _: { };
-            "Mod+Shift+Up".move-window-to-workspace-up = _: { };
-
-            # move windows to other monitor
-            "Mod+Shift+Alt+Left".move-window-to-monitor-left = _: { };
-            "Mod+Shift+Alt+Right".move-window-to-monitor-right = _: { };
-
-            # consume/expel windows into/from columns
-            "Mod+I".consume-window-into-column = _: { };
-            "Mod+O".expel-window-from-column = _: { };
-
-            # focus vertical windows
-            "Mod+Shift+I".focus-window-up = _: { };
-            "Mod+Shift+O".focus-window-down = _: { };
-
-            # resize
-            "Mod+Ctrl+Left".set-column-width = "-5%";
-            "Mod+Ctrl+Right".set-column-width = "+5%";
-            "Mod+Ctrl+Up".set-window-height = "+5%";
-            "Mod+Ctrl+Down".set-window-height = "-5%";
-
-            # system
-            "Mod+Shift+E".quit = _: { };
-            "Mod+Shift+P".power-off-monitors = _: { };
-            "Print".screenshot = _: { };
-            "Ctrl+Print".screenshot-screen = _: { };
-            "Alt+Print".screenshot-window = _: { };
-
-            # audio
-            "XF86AudioRaiseVolume".spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
-            "XF86AudioLowerVolume".spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
-            "XF86AudioMute".spawn-sh = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-          };
-        };
+        package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri;
+        env.NIRI_CONFIG = "${niriConf}";
       };
     };
 }

@@ -6,6 +6,13 @@ in
   flake.nixosModules.hyprland =
     { pkgs, ... }:
     {
+      # This nixosConfiguration is the hyprland build — register only hyprland's session.
+      programs.hyprland = {
+        enable = true;
+        package = pkgs.hyprland;
+        portalPackage = pkgs.xdg-desktop-portal-hyprland;
+      };
+
       # Keep unwrapped hyprland for SDDM session registration (passthru.providedSessions).
       # The wrapped variant is installed alongside it — it wins in PATH by being listed last.
       environment.systemPackages = [
