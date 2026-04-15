@@ -1,0 +1,53 @@
+/// Monitor identity constants and DMS screen-matching helpers for fomonix.
+module monitors
+
+// ── Machine Monitor Identity ───────────────────────────────────────────────
+
+local primaryName    = "DP-1"
+local primaryModel   = "M27QA ICE"
+local primaryX       = 0
+
+local secondaryName  = "DP-2"
+local secondaryModel = "Unknown"
+local secondaryX     = 2560
+
+// ── Monitor Classes ───────────────────────────────────────────────────────
+
+class MonitorLeaf {
+  name: String
+  refreshRate: Int = 180
+  res: String = "2560x1440"
+  x: Int
+  y: Int = 0
+}
+class MonitorPlain  { model: String; name: MonitorLeaf  }
+class MonitorLeaf2  { name: MonitorLeaf;  refreshRate: Int = 180; res: String = "2560x1440"; x: Int; y: Int = 0 }
+class MonitorSimple { model: String; name: MonitorLeaf2 }
+class MonitorLeaf3  { name: MonitorLeaf2; refreshRate: Int = 180; res: String = "2560x1440"; x: Int; y: Int = 0 }
+class MonitorFull   { model: String; name: MonitorLeaf3 }
+
+// ── Helper ────────────────────────────────────────────────────────────────
+//
+// Produces all 3 redundant entries DMS needs to reliably match a display.
+
+function monitorEntries(mName: String, mModel: String, mX: Int): Listing = new Listing {
+  new MonitorFull {
+    model = mModel
+    name = new MonitorLeaf3 { x = mX; name = new MonitorLeaf2 { x = mX; name = new MonitorLeaf { name = mName; x = mX } } }
+  }
+  new MonitorSimple {
+    model = mModel
+    name = new MonitorLeaf2 { x = mX; name = new MonitorLeaf { name = mName; x = mX } }
+  }
+  new MonitorPlain {
+    model = mModel
+    name = new MonitorLeaf { name = mName; x = mX }
+  }
+}
+
+// ── Convenience Listings ──────────────────────────────────────────────────
+//
+// Pre-built entries for each display so call sites don't repeat the constants.
+
+primary   = monitorEntries(primaryName,   primaryModel,   primaryX)
+secondary = monitorEntries(secondaryName, secondaryModel, secondaryX)

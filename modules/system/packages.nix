@@ -13,6 +13,8 @@
         nixfmt
         stylua
         jq
+        pkl
+        pkl-lsp
       ];
     };
 }

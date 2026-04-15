@@ -22,6 +22,7 @@
       yaml
       markdown
       markdown_inline
+      pkl
     ];
   };
 }

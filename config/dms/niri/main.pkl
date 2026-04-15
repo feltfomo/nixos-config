@@ -1,0 +1,52 @@
+// DMS Niri Settings
+// Run: pkl eval --format json main.pkl -o settings.json
+amends "pkl:base"
+
+import "../../config.pkl" as cfg
+import "appearance.pkl" as appearance
+import "bar.pkl" as bar
+import "workspace.pkl" as workspace
+import "dock.pkl" as dock
+import "launcher.pkl" as launcher
+import "notifications.pkl" as notifications
+import "lock.pkl" as lock
+import "misc.pkl" as misc
+
+output {
+  value = new Dynamic {
+    ...appearance.toDynamic()
+    ...bar.toDynamic()
+    ...workspace.toDynamic()
+    ...dock.toDynamic()
+    ...launcher.toDynamic()
+    ...notifications.toDynamic()
+    ...lock.toDynamic()
+    ...misc.toDynamic()
+
+    fontFamily     = cfg.fontFamily
+    monoFontFamily = cfg.monoFontFamily
+    fontWeight     = 400
+    fontScale      = 1.0
+    use24HourClock = cfg.use24HourClock
+    showSeconds    = cfg.showSeconds
+    padHours12Hour = cfg.padHours12Hour
+    firstDayOfWeek = cfg.firstDayOfWeek
+
+    weatherEnabled  = true
+    useAutoLocation = false
+    useFahrenheit   = cfg.useFahrenheit
+    windSpeedUnit   = cfg.windSpeedUnit
+    iconTheme       = "System Default"
+
+    cursorSettings {
+      theme = "System Default"
+      size  = cfg.cursorSize
+      niri     { hideWhenTyping = false; hideAfterInactiveMs = 0 }
+      hyprland { hideOnKeyPress = false; hideOnTouch = false; inactiveTimeout = 0 }
+      dwl      { cursorHideTimeout = 0 }
+    }
+
+    showWeekNumber   = false
+    nightModeEnabled = false
+  }
+}

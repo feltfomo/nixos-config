@@ -1,0 +1,32 @@
+open module notifications
+
+notificationOverlayEnabled          = true
+notificationPopupShadowEnabled      = true
+notificationPopupPrivacyMode        = false
+notificationTimeoutLow              = 5000
+notificationTimeoutNormal           = 5000
+notificationTimeoutCritical         = 0
+notificationCompactMode             = false
+notificationPopupPosition           = 0
+notificationAnimationSpeed          = 1.0
+notificationCustomAnimationDuration = 400
+notificationHistoryEnabled          = true
+notificationHistoryMaxCount         = 50
+notificationHistoryMaxAgeDays       = 7
+notificationHistorySaveLow          = true
+notificationHistorySaveNormal       = true
+notificationHistorySaveCritical     = true
+notificationRules                   = new Listing {}
+notificationFocusedMonitor          = true
+
+osdAlwaysShowValue      = true
+osdPosition             = 5
+osdVolumeEnabled        = true
+osdMediaVolumeEnabled   = true
+osdMediaPlaybackEnabled = true
+osdBrightnessEnabled    = true
+osdIdleInhibitorEnabled = true
+osdMicMuteEnabled       = true
+osdCapsLockEnabled      = true
+osdPowerProfileEnabled  = false
+osdAudioOutputEnabled   = true

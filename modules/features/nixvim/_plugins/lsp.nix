@@ -8,6 +8,7 @@
       jsonls.enable = true;
       yamlls.enable = true;
       marksman.enable = true;
+      pkl_lsp.enable = true;
     };
     keymaps = {
       diagnostic = {

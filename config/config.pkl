@@ -1,0 +1,20 @@
+/// Shared fomonix machine/personal constants.
+/// Importable by any app or program config that needs machine-level defaults.
+module config
+
+// Locale / Time
+use24HourClock = true
+showSeconds    = true
+padHours12Hour = false
+firstDayOfWeek = -1
+
+// Units
+useFahrenheit = true
+windSpeedUnit = "kmh"
+
+// Cursor
+cursorSize = 24
+
+// Fonts
+fontFamily     = "Inter Variable"
+monoFontFamily = "Fira Code"

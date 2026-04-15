@@ -1,0 +1,65 @@
+open module lock
+
+lockScreenShowPowerActions       = true
+lockScreenShowSystemIcons        = true
+lockScreenShowTime               = true
+lockScreenShowDate               = true
+lockScreenShowProfileImage       = true
+lockScreenShowPasswordField      = true
+lockScreenShowMediaPlayer        = true
+lockScreenPowerOffMonitorsOnLock = false
+lockAtStartup                    = false
+enableFprint                     = false
+maxFprintTries                   = 15
+enableU2f                        = false
+u2fMode                          = "or"
+lockScreenActiveMonitor          = "all"
+lockScreenInactiveColor          = "#000000"
+lockScreenNotificationMode       = 0
+lockScreenVideoEnabled           = false
+lockScreenVideoPath              = ""
+lockScreenVideoCycling           = false
+lockDateFormat                   = ""
+greeterRememberLastSession       = true
+greeterRememberLastUser          = true
+greeterEnableFprint              = false
+greeterEnableU2f                 = false
+greeterWallpaperPath             = ""
+greeterUse24HourClock            = true
+greeterShowSeconds               = false
+greeterPadHours12Hour            = false
+greeterLockDateFormat            = ""
+greeterFontFamily                = ""
+greeterWallpaperFillMode         = ""
+fadeToLockEnabled                = true
+fadeToLockGracePeriod            = 5
+fadeToDpmsEnabled                = true
+fadeToDpmsGracePeriod            = 5
+loginctlLockIntegration          = true
+hideBrightnessSlider             = false
+
+powerActionConfirm      = true
+powerActionHoldDuration = 0.5
+powerMenuActions        = new Listing { "reboot"; "logout"; "poweroff"; "lock"; "suspend"; "restart" }
+powerMenuDefaultAction  = "logout"
+powerMenuGridLayout     = false
+customPowerActionLock      = ""
+customPowerActionLogout    = ""
+customPowerActionSuspend   = ""
+customPowerActionHibernate = ""
+customPowerActionReboot    = ""
+customPowerActionPowerOff  = ""
+
+acMonitorTimeout      = 0
+acLockTimeout         = 0
+acSuspendTimeout      = 0
+acSuspendBehavior     = 0
+acProfileName         = ""
+batteryMonitorTimeout   = 0
+batteryLockTimeout      = 0
+batterySuspendTimeout   = 0
+batterySuspendBehavior  = 0
+batteryProfileName      = ""
+batteryChargeLimit      = 100
+lockBeforeSuspend       = false
+brightnessDevicePins {}
