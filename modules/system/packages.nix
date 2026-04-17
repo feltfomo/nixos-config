@@ -5,6 +5,9 @@
     {
       environment.systemPackages = with pkgs; [
         git
+        gamemode
+        mangohud
+        mangojuice
         socat
         grimblast
         satty

@@ -1,0 +1,78 @@
+/// Monitor identity constants and DMS screen-matching helpers.
+///
+/// - cfg.primary_* / cfg.secondary_* hold plain display facts (safe to use anywhere)
+/// - monitorEntries() builds the 3-level nested objects DMS requires
+/// - primary / secondary are convenience listings for call sites
+module monitors
+
+import "../../../config.pkl" as cfg
+
+// Monitor classes
+// DMS needs 3 redundant nesting levels to reliably match a display.
+// These model that structure — don't use them directly outside this file.
+class MonitorLeaf {
+  name:        String
+  x:           Int
+  y:           Int = 0
+  res:         String
+  refreshRate: Int
+}
+
+class MonitorMid {
+  name:        MonitorLeaf
+  x:           Int
+  y:           Int = 0
+  res:         String
+  refreshRate: Int
+}
+
+class MonitorTop {
+  name:        MonitorMid
+  x:           Int
+  y:           Int = 0
+  res:         String
+  refreshRate: Int
+}
+
+class MonitorPlain  { model: String; name: MonitorLeaf }
+class MonitorSimple { model: String; name: MonitorMid  }
+class MonitorFull   { model: String; name: MonitorTop  }
+
+// Helper
+// Builds all 3 redundant entries DMS needs to reliably match a display.
+function monitorEntries(mName: String, mModel: String, mX: Int, mRes: String, mRefresh: Int): Listing =
+  new Listing {
+    new MonitorFull {
+      model = mModel
+      name  = new MonitorTop {
+        x           = mX
+        res         = mRes
+        refreshRate = mRefresh
+        name = new MonitorMid {
+          x           = mX
+          res         = mRes
+          refreshRate = mRefresh
+          name = new MonitorLeaf { name = mName; x = mX; res = mRes; refreshRate = mRefresh }
+        }
+      }
+    }
+    new MonitorSimple {
+      model = mModel
+      name  = new MonitorMid {
+        x           = mX
+        res         = mRes
+        refreshRate = mRefresh
+        name = new MonitorLeaf { name = mName; x = mX; res = mRes; refreshRate = mRefresh }
+      }
+    }
+    new MonitorPlain {
+      model = mModel
+      name  = new MonitorLeaf { name = mName; x = mX; res = mRes; refreshRate = mRefresh }
+    }
+    new { name = mName; model = mModel }
+  }
+
+// Convenience listings
+// Use mon.primary / mon.secondary at call sites — no need to repeat args.
+primary   = monitorEntries(cfg.primary_name,   cfg.primary_model,   cfg.primary_x,   cfg.primary_res,   cfg.primary_refresh)
+secondary = monitorEntries(cfg.secondary_name, cfg.secondary_model, cfg.secondary_x, cfg.secondary_res, cfg.secondary_refresh)

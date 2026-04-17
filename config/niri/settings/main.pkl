@@ -1,0 +1,61 @@
+amends "pkl:base"
+
+import ".../libs/kdl.pkl" as r
+import "environment.pkl" as env
+import "input.pkl" as inp
+import "gestures.pkl" as ges
+import "cursor.pkl" as cur
+import "layout.pkl" as lay
+import "rules.pkl" as rul
+import "binds.pkl" as bnd
+import "outputs.pkl" as outputs
+
+// Store path placeholders — substituted by pkgs.substituteAll in Nix
+local xwaylandBin = "@xwaylandBin@"
+local dmsBin = "@dmsBin@"
+local kittyBin = "@kittyBin@"
+local firefoxBin = "@firefoxBin@"
+
+local document: Listing<r.KdlNode> = new {
+  // Global flag
+  new { name = "prefer-no-csd"; flag = true }
+
+  // XWayland satellite
+  new {
+    name = "xwayland-satellite"
+    children = new {
+      new { name = "path"; args = new { xwaylandBin } }
+    }
+  }
+
+  // Environment variables
+  ...env.environmentNodes
+
+  // Input devices
+  ...inp.inputNodes
+
+  // Gestures
+  ...ges.gesturesNodes
+
+  // Cursor theme
+  ...cur.cursorNodes
+
+  // Layout
+  ...lay.layoutNodes
+
+  // Window rules, layer rules, and include
+  ...rul.rulesNodes
+
+  // Monitors
+  ...outputs.outputNodes
+
+  // DMS startup
+  new { name = "spawn-at-startup"; args = new { dmsBin; "run" } }
+
+  // Keybinds
+  ...bnd.bindsNodes
+}
+
+output {
+  text = r.renderDocument(document)
+}

@@ -1,0 +1,8 @@
+amends "pkl:base"
+
+// Store path injected by pkgs.substituteAll in Nix
+local zoxideBin = "@zoxideBin@"
+
+output {
+  text = "\(zoxideBin)/bin/zoxide init fish | source\n"
+}

@@ -1,0 +1,24 @@
+/// Shared rendering utilities for matugen template pipelines.
+/// ConfTemplateRenderer — flat key = value conf files (kitty etc.)
+/// PreambleRenderer     — TOML with [config] header (template registries)
+open module matugen
+
+import ".../libs/toml.pkl" as toml
+
+open class ConfTemplateRenderer extends ValueRenderer {
+  function renderDocument(value: Any): String =
+    value
+      .toMap()
+      .entries
+      .map((e) -> "\(e.key) \(e.value)")
+      .join("\n") + "\n"
+}
+
+open class PreambleRenderer extends ValueRenderer {
+  inner: toml.Renderer
+
+  function renderDocument(value: Any): String =
+    "[config]\n\n" + inner.renderDocument(value)
+
+  function renderValue(value: Any): String = inner.renderValue(value)
+}

@@ -7,18 +7,30 @@
   monitors = {
     primary = {
       name = "DP-1";
-      res = "2560x1440";
-      refreshRate = 180;
+      res = "2560x1440@180";
       x = 0;
       y = 0;
     };
     secondary = {
       name = "DP-2";
-      res = "2560x1440";
-      refreshRate = 180;
+      res = "2560x1440@180";
       x = 2560;
       y = 0;
     };
+  };
+
+  cursor = {
+    name = "BreezeX-RosePine-Linux";
+    size = 24;
+  };
+
+  font = {
+    mono = "JetBrainsMono Nerd Font";
+    sans = "Inter";
+  };
+
+  opacity = {
+    windows = 0.8;
   };
 
   disk = {
@@ -30,6 +42,6 @@
   rebuild = {
     autoSync = true;
     autoQsClean = true;
-    defaultConfig = "fomonixHyprland"; # used by the orchestrator TUI
+    defaultConfig = "fomonixHyprland";
   };
 }

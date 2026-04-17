@@ -1,0 +1,29 @@
+amends "pkl:base"
+import ".../libs/hyprlang.pkl" as r
+import "env.pkl" as env
+import "monitor.pkl" as mon
+import "exec.pkl" as exec
+import "general.pkl" as gen
+import "decoration.pkl" as dec
+import "input.pkl" as inp
+import "rules.pkl" as rules
+import "misc.pkl" as misc
+import "workspaces.pkl" as ws
+import "binds.pkl" as binds
+
+local document: Listing<r.HyprNode> = new {
+  ...env.envNodes
+  ...mon.monitorNodes
+  ...exec.execNodes
+  ...gen.generalNodes
+  ...dec.decorationNodes
+  ...inp.inputNodes
+  ...rules.rulesNodes
+  ...misc.miscNodes
+  ...ws.workspaceNodes
+  ...binds.bindNodes
+}
+
+output {
+  text = r.renderDocument(document)
+}

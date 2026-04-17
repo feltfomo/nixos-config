@@ -1,0 +1,9 @@
+open module exec
+import ".../libs/hyprlang.pkl" as r
+
+execNodes: Listing<r.HyprNode> = new {
+  new { name = "exec-once"; value = "@noctaliaHyprlandBin@" }
+  new { name = "exec-once"; value = "nu @submapDaemon@" }
+  new { name = "exec-once"; value = "wl-paste --type text --watch cliphist store" }
+  new { name = "exec-once"; value = "wl-paste --type image --watch cliphist store" }
+}

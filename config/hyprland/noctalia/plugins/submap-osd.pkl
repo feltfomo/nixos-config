@@ -1,0 +1,225 @@
+/// Submap OSD plugin fragment.
+/// Exposes: manifest (Dynamic) + mainQml (QmlDocument).
+open module submapOsd
+
+import ".../libs/qml.pkl" as r
+
+manifest {
+  id = "submap-osd"
+  name = "Submap OSD"
+  version = "1.0.0"
+  minNoctaliaVersion = "3.6.0"
+  author = "feltfomo"
+  license = "MIT"
+  repository = "local"
+  description = "OSD overlay showing active Hyprland submap"
+  entryPoints { main = "Main.qml" }
+  dependencies { plugins = new Listing {} }
+  metadata { defaultSettings {} }
+}
+
+local keyIcon: r.QmlObject = new {
+  type = "Text"
+  body = new {
+    r.expr("anchors.centerIn", "parent")
+    r.prop("text", "󰌌")
+    r.expr("color", "Color.mPrimary")
+    new r.Prop { name = "font.pixelSize"; value = 15 }
+    r.prop("font.family", "JetBrainsMono Nerd Font")
+  }
+}
+
+local iconBadge: r.QmlObject = new {
+  type = "Rectangle"
+  body = new {
+    new r.Prop { name = "width";  value = 26 }
+    new r.Prop { name = "height"; value = 26 }
+    r.expr("radius", "Style.radiusS")
+    r.expr("color", "Qt.alpha(Color.mPrimary, 0.18)")
+    r.expr("anchors.verticalCenter", "parent.verticalCenter")
+    r.child(keyIcon)
+  }
+}
+
+local labelText: r.QmlObject = new {
+  type = "Text"
+  body = new {
+    r.expr("anchors.verticalCenter", "parent.verticalCenter")
+    r.prop("text", "Submap:")
+    r.expr("color", "Color.mOnSurfaceVariant")
+    new r.Prop { name = "font.pixelSize"; value = 12 }
+    r.expr("font.family", "Settings.data.ui.fontMain")
+  }
+}
+
+local valueText: r.QmlObject = new {
+  type = "Text"
+  body = new {
+    r.expr("anchors.verticalCenter", "parent.verticalCenter")
+    r.expr("text", "root.submapName")
+    r.expr("color", "Color.mOnSurface")
+    new r.Prop { name = "font.pixelSize"; value = 14 }
+    r.expr("font.family", "Settings.data.ui.fontMain")
+  }
+}
+
+local pill: r.QmlObject = new {
+  type = "Row"
+  id = "pill"
+  body = new {
+    r.expr("anchors.centerIn", "parent")
+    new r.Prop { name = "spacing"; value = 8 }
+    r.child(iconBadge)
+    r.child(labelText)
+    r.child(valueText)
+  }
+}
+
+local pillRect: r.QmlObject = new {
+  type = "Rectangle"
+  body = new {
+    r.expr("anchors.centerIn", "parent")
+    r.expr("width", "pill.implicitWidth + 40")
+    new r.Prop { name = "height"; value = 48 }
+    new r.Prop { name = "radius"; value = 24 }
+    r.expr("color", "Qt.alpha(Color.mSurface, 0.75)")
+    r.expr("border.color", "Qt.alpha(Color.mOutline, 0.3)")
+    new r.Prop { name = "border.width"; value = 1 }
+    r.child(pill)
+  }
+}
+
+local behaviorOpacity: r.QmlObject = new {
+  type = "Behavior on opacity"
+  body = new {
+    r.child(new r.QmlObject {
+      type = "NumberAnimation"
+      inline = true
+      body = new {
+        new r.Prop { name = "duration"; value = 200 }
+        r.expr("easing.type", "Easing.InOutQuad")
+      }
+    })
+  }
+}
+
+local osdContent: r.QmlObject = new {
+  type = "Item"
+  id = "osdContent"
+  body = new {
+    r.expr("anchors.fill", "parent")
+    new r.Prop { name = "opacity"; value = 0 }
+    r.child(behaviorOpacity)
+    r.block("onOpacityChanged", new Listing<String> {
+      "if (opacity === 0) osdWindow.visible = false;"
+    })
+    r.child(pillRect)
+  }
+}
+
+local connections: r.QmlObject = new {
+  type = "Connections"
+  body = new {
+    r.expr("target", "root")
+    r.block("function onShowOsd()", new Listing<String> {
+      "pluginApi.withCurrentScreen(function(currentScreen) {"
+      "    if (osdWindow.screen === currentScreen) {"
+      "        osdWindow.visible = true;"
+      "        osdContent.opacity = 1;"
+      "    }"
+      "});"
+    })
+    r.block("function onHideOsd()", new Listing<String> {
+      "osdContent.opacity = 0;"
+    })
+  }
+}
+
+local panelWindow: r.QmlObject = new {
+  type = "PanelWindow"
+  id = "osdWindow"
+  body = new {
+    r.required("var", "modelData")
+    r.expr("screen", "modelData")
+    new r.Prop { name = "visible"; value = false }
+    r.prop("color", "transparent")
+    new r.AnchorsBlock {
+      entries = new {
+        new r.Prop { name = "bottom"; value = true }
+        new r.Prop { name = "left";   value = true }
+        new r.Prop { name = "right";  value = true }
+      }
+    }
+    new r.Prop { name = "margins.bottom"; value = 80 }
+    r.expr("exclusionMode", "ExclusionMode.Ignore")
+    r.expr("WlrLayershell.layer", "WlrLayer.Overlay")
+    r.prop("WlrLayershell.namespace", "submap-osd")
+    new r.Prop { name = "implicitHeight"; value = 56 }
+    r.child(connections)
+    r.child(osdContent)
+  }
+}
+
+local fileReader: r.QmlObject = new {
+  type = "Process"
+  id = "fileReader"
+  body = new {
+    r.expr("command", #"["cat", "/tmp/hypr-submap"]"#)
+    r.blockExpr("stdout", "SplitParser { onRead: data => root.submapName = data.trim() }")
+  }
+}
+
+local hideTimer: r.QmlObject = new {
+  type = "Timer"
+  id = "hideTimer"
+  body = new {
+    new r.Prop { name = "interval"; value = 3000 }
+    r.expr("onTriggered", "root.hideOsd()")
+  }
+}
+
+local ipcHandler: r.QmlObject = new {
+  type = "IpcHandler"
+  body = new {
+    r.prop("target", "plugin:submap-osd")
+    r.block("function display(): void", new Listing<String> {
+      #"Logger.i("SubOSD", "display called");"#
+      "fileReader.running = true;"
+      "root.showOsd();"
+      "hideTimer.restart();"
+    })
+    r.block("function dismiss(): void", new Listing<String> {
+      "root.hideOsd();"
+    })
+  }
+}
+
+mainQml: r.QmlDocument = new {
+  imports = new {
+    "QtQuick"
+    "Quickshell"
+    "Quickshell.Io"
+    "Quickshell.Wayland"
+    "qs.Commons"
+  }
+  root = new r.QmlObject {
+    type = "Item"
+    id = "root"
+    body = new {
+      new r.Prop { name = "property var pluginApi";     value = new r.Expr { value = "null" } }
+      new r.Prop { name = "property string submapName"; value = new r.Expr { value = "\"\"" } }
+      r.signal("showOsd")
+      r.signal("hideOsd")
+      r.child(fileReader)
+      r.child(ipcHandler)
+      r.child(hideTimer)
+      r.child(new r.QmlObject {
+        type = "Variants"
+        body = new {
+          r.expr("model", "Quickshell.screens")
+          r.child(panelWindow)
+        }
+      })
+    }
+  }
+}

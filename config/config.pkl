@@ -1,20 +1,41 @@
-/// Shared fomonix machine/personal constants.
-/// Importable by any app or program config that needs machine-level defaults.
+/// Shared machine-level defaults — importable by any module that needs them.
 module config
 
-// Locale / Time
-use24HourClock = true
-showSeconds    = true
-padHours12Hour = false
-firstDayOfWeek = -1
+// User
+const username: String = "feltfomo"
+const home: String = "/home/\(username)"
+
+// Time and locale
+const use_24h:           Boolean = true
+const show_seconds:      Boolean = true
+const pad_hours_12h:     Boolean = false
+const first_day_of_week: Int     = -1
 
 // Units
-useFahrenheit = true
-windSpeedUnit = "kmh"
+const use_fahrenheit:  Boolean = true
+const wind_speed_unit: String  = "kmh"
 
 // Cursor
-cursorSize = 24
+const cursor_size: Int = 24
 
 // Fonts
-fontFamily     = "Inter Variable"
-monoFontFamily = "Fira Code"
+const font:               String = "Inter Variable"
+const font_size:          Int    = 1
+const mono_font:          String = "JetBrainsMono Nerd Font"
+const terminal_font_size: Int    = 12
+const terminal_opacity:   Float  = 0.94
+const font_weight:        Int    = 400
+const font_scale:         Float  = 1.0
+
+// Monitors
+const primary_name:    String = "DP-1"
+const primary_model:   String = "M27QA ICE"
+const primary_x:       Int    = 0
+const primary_res:     String = "2560x1440"
+const primary_refresh: Int    = 180
+
+const secondary_name:    String = "DP-2"
+const secondary_model:   String = "Unknown"
+const secondary_x:       Int    = 2560
+const secondary_res:     String = "2560x1440"
+const secondary_refresh: Int    = 180

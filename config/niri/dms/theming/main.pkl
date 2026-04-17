@@ -1,0 +1,25 @@
+amends "pkl:base"
+
+import "template-registry.pkl"                  as registry
+import ".../common/theming/kitty.pkl"           as kitty
+import ".../common/theming/niri-colors.pkl"     as niriColors
+import ".../common/theming/nvim-colors.pkl"     as nvimColors
+import ".../common/theming/lualine.pkl"         as lualine
+import ".../common/theming/foot-colors.pkl"     as footColors
+import ".../common/theming/zed-theme.pkl"       as zedTheme
+import ".../common/theming/satty.pkl"           as satty
+import ".../common/theming/ghostty.pkl"         as ghostty
+
+output {
+  files {
+    ["config.toml"]              = registry.output
+    ["kitty-dms-colors.conf"]    = kitty.output
+    ["niri-dms-colors.kdl"]      = niriColors.output
+    ["nvim-dms-colors.lua"]      = nvimColors.output
+    ["lualine-dms-colors.lua"]   = lualine.output
+    ["foot-dms-colors.ini"]      = footColors.output
+    ["zed-theme.json"]           = zedTheme.output
+    ["satty.css"]                = satty.output
+    ["ghostty-colors"]           = ghostty.output
+  }
+}

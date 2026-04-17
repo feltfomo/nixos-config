@@ -1,0 +1,82 @@
+/// Lua code-generation helpers for the fomonix pkl pipeline.
+///
+/// Wraps Apple's lua.pkl for data→table rendering.
+/// For imperative Lua (function defs, call expressions, raw statements),
+/// build the full source as a pkl String and emit it via [LuaCodeRenderer].
+///
+/// Matugen tokens like {{colors.primary.default.hex}} are plain pkl strings —
+/// pkl never evaluates them, matugen substitutes them at theming time.
+@ModuleInfo { minPklVersion = "0.25.0" }
+open module luagen
+
+import "lua.pkl" as apple
+
+/// Re-export of Apple's table Renderer for data→table output.
+typealias Renderer = apple.Renderer
+
+/// Re-export of RenderDirective for raw-text escape inside Apple's renderer.
+typealias RenderDirective = apple.RenderDirective
+
+/// Emits a pre-built Lua code string verbatim.
+///
+/// Set [output.renderer] to this when a module constructs the full Lua source
+/// as a String and just needs pkl to write it out unchanged.
+class LuaCodeRenderer extends ValueRenderer {
+  extension = "lua"
+
+  function renderDocument(value: Any): String =
+    if (value is String) value + "\n"
+    else throw("LuaCodeRenderer expects a String, got \(value.getClass())")
+
+  function renderValue(value: Any): String =
+    if (value is String) value
+    else throw("LuaCodeRenderer expects a String, got \(value.getClass())")
+}
+
+/// Renders a Dynamic as a Lua table string using Apple's renderer.
+///
+/// Example:
+///   renderTable(new Dynamic { fg = "c.fg"; bg = "c.bg" })
+///   → '{ fg = "c.fg"; bg = "c.bg" }'
+function renderTable(value: Dynamic): String =
+  new apple.Renderer {}.renderValue(value)
+
+/// A raw Lua expression emitted verbatim — not quoted.
+///
+/// Use for values like `darken(primary, 0.15)` or `c.fg` inside table values
+/// where Apple's renderer would otherwise wrap them in quotes.
+class RawExpr {
+  hidden expr: String
+}
+
+function rawExpr(e: String): RawExpr = new RawExpr { expr = e }
+
+/// Renders a Dynamic where values may be [RawExpr], plain Strings, or Booleans.
+///
+/// RawExpr → verbatim, String → quoted, Boolean → true/false.
+/// Use for hi() opts tables and lualine mode tables.
+function renderOpts(value: Dynamic): String =
+  let (entries = value.toMap().entries)
+  let (inner = entries
+    .map((k, v) ->
+      if (v is RawExpr) "\(k) = \(v.expr)"
+      else if (v is Boolean) "\(k) = \(v)"
+      else "\(k) = \"\(v)\"")
+    .join(", "))
+  "{ \(inner) }"
+
+/// The darken() helper used by nvim and lualine templates.
+const darkenFn: String = """
+  local function darken(hex, amount)
+    local r = tonumber(hex:sub(2,3), 16)
+    local g = tonumber(hex:sub(4,5), 16)
+    local b = tonumber(hex:sub(6,7), 16)
+    r = math.max(0, math.floor(r * amount))
+    g = math.max(0, math.floor(g * amount))
+    b = math.max(0, math.floor(b * amount))
+    return string.format("#%02x%02x%02x", r, g, b)
+  end
+  """
+
+/// Wraps a matugen color path in {{...}} so matugen substitutes it at theming time.
+function matugen(path: String): String = "{{\(path)}}"

@@ -1,0 +1,9 @@
+amends "pkl:base"
+
+output {
+  text = """
+    if status is-interactive
+      fastfetch
+    end
+    """
+}

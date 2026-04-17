@@ -1,0 +1,9 @@
+open module templates
+
+templates {
+  enableUserTheming = true
+  activeTemplates = new Listing {
+    new Dynamic { id = "gtk"; enabled = true }
+    new Dynamic { id = "qt";  enabled = true }
+  }
+}

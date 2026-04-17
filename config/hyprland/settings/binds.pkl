@@ -1,0 +1,75 @@
+open module binds
+import ".../libs/hyprlang.pkl" as r
+
+local sink = "@DEFAULT_AUDIO_SINK\("@")"
+
+bindNodes: Listing<r.HyprNode> = new {
+  // apps
+  new { name = "bind"; value = "SUPER, T, exec, @kittyHyprlandBin@" }
+  new { name = "bind"; value = "SUPER, W, exec, @firefoxBin@" }
+  new { name = "bind"; value = "SUPER, SPACE, exec, @noctaliaHyprlandBin@ ipc call launcher toggle" }
+  new { name = "bind"; value = "SUPER, C, exec, @noctaliaHyprlandBin@ ipc call plugin:clipper toggle" }
+  // window management
+  new { name = "bind"; value = "SUPER, Q, killactive" }
+  new { name = "bind"; value = "SUPER, F, fullscreen, 1" }
+  new { name = "bind"; value = "SUPER SHIFT, F, fullscreen, 0" }
+  new { name = "bind"; value = "SUPER, V, togglefloating" }
+  // mouse
+  new { name = "bindm"; value = "SUPER, mouse:272, movewindow" }
+  new { name = "bindm"; value = "SUPER, mouse:273, resizewindow" }
+  // focus
+  new { name = "bind"; value = "SUPER, left, movefocus, l" }
+  new { name = "bind"; value = "SUPER, right, movefocus, r" }
+  new { name = "bind"; value = "SUPER, up, movefocus, u" }
+  new { name = "bind"; value = "SUPER, down, movefocus, d" }
+  // move on monitor
+  new { name = "bind"; value = "SUPER SHIFT, left, movewindow, l" }
+  new { name = "bind"; value = "SUPER SHIFT, right, movewindow, r" }
+  new { name = "bind"; value = "SUPER SHIFT, up, movewindow, u" }
+  new { name = "bind"; value = "SUPER SHIFT, down, movewindow, d" }
+  // move between monitors
+  new { name = "bind"; value = "SUPER ALT, left, movewindow, mon:l" }
+  new { name = "bind"; value = "SUPER ALT, right, movewindow, mon:r" }
+  // workspaces
+  new { name = "bind"; value = "SUPER, 1, exec, nu @workspaceScript@ 1" }
+  new { name = "bind"; value = "SUPER, 2, exec, nu @workspaceScript@ 2" }
+  new { name = "bind"; value = "SUPER, 3, exec, nu @workspaceScript@ 3" }
+  new { name = "bind"; value = "SUPER, 4, exec, nu @workspaceScript@ 4" }
+  new { name = "bind"; value = "SUPER, 5, exec, nu @workspaceScript@ 5" }
+  new { name = "bind"; value = "SUPER, 6, exec, nu @workspaceScript@ 6" }
+  new { name = "bind"; value = "SUPER, 7, exec, nu @workspaceScript@ 7" }
+  new { name = "bind"; value = "SUPER, 8, exec, nu @workspaceScript@ 8" }
+  new { name = "bind"; value = "SUPER, 9, exec, nu @workspaceScript@ 9" }
+  new { name = "bind"; value = "SUPER, 0, exec, nu @workspaceScript@ 10" }
+  // move to workspace
+  new { name = "bind"; value = "SUPER SHIFT, 1, exec, nu @moveToWorkspaceScript@ 1" }
+  new { name = "bind"; value = "SUPER SHIFT, 2, exec, nu @moveToWorkspaceScript@ 2" }
+  new { name = "bind"; value = "SUPER SHIFT, 3, exec, nu @moveToWorkspaceScript@ 3" }
+  new { name = "bind"; value = "SUPER SHIFT, 4, exec, nu @moveToWorkspaceScript@ 4" }
+  new { name = "bind"; value = "SUPER SHIFT, 5, exec, nu @moveToWorkspaceScript@ 5" }
+  new { name = "bind"; value = "SUPER SHIFT, 6, exec, nu @moveToWorkspaceScript@ 6" }
+  new { name = "bind"; value = "SUPER SHIFT, 7, exec, nu @moveToWorkspaceScript@ 7" }
+  new { name = "bind"; value = "SUPER SHIFT, 8, exec, nu @moveToWorkspaceScript@ 8" }
+  new { name = "bind"; value = "SUPER SHIFT, 9, exec, nu @moveToWorkspaceScript@ 9" }
+  new { name = "bind"; value = "SUPER SHIFT, 0, exec, nu @moveToWorkspaceScript@ 10" }
+  // resize submap
+  new { name = "bind"; value = "SUPER, R, submap, resize" }
+  new { name = "submap"; value = "resize" }
+  new { name = "binde"; value = ", right, resizeactive, 50 0" }
+  new { name = "binde"; value = ", left, resizeactive, -50 0" }
+  new { name = "binde"; value = ", up, resizeactive, 0 -50" }
+  new { name = "binde"; value = ", down, resizeactive, 0 50" }
+  new { name = "bind"; value = ", escape, submap, reset" }
+  new { name = "bind"; value = "SUPER, R, submap, reset" }
+  new { name = "submap"; value = "reset" }
+  // system
+  new { name = "bind"; value = "SUPER SHIFT, E, exit" }
+  new { name = "bind"; value = ", Print, exec, hyprshot -m output" }
+  new { name = "bind"; value = "CTRL, Print, exec, hyprshot -m region" }
+  // audio
+  new { name = "bind"; value = ", XF86AudioRaiseVolume, exec, wpctl set-volume \(sink) 5%+" }
+  new { name = "bind"; value = ", XF86AudioLowerVolume, exec, wpctl set-volume \(sink) 5%-" }
+  new { name = "bind"; value = ", XF86AudioMute, exec, wpctl set-mute \(sink) toggle" }
+  // screenshot
+  new { name = "bind"; value = "SUPER SHIFT, S, exec, grimblast save area /tmp/satty-screenshot.png && satty --filename /tmp/satty-screenshot.png" }
+}

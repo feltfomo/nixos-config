@@ -1,0 +1,30 @@
+open module renderer
+
+/// A single hyprlang statement or section.
+class HyprNode {
+  /// Keyword or section name, e.g. "bind", "general", "monitor"
+  name: String
+
+  /// Value after " = " for assignments. Null for sections.
+  value: String?
+
+  /// Child nodes inside { } — makes this a section block.
+  children: Listing<HyprNode>?
+}
+
+local function renderNode(node: HyprNode, depth: Int): String =
+  let(indent = "  ".repeat(depth))
+  if (node.children != null)
+    let(childLines =
+      node.children!!.toList()
+        .map((c) -> renderNode(c, depth + 1))
+        .join("\n")
+    )
+    "\(indent)\(node.name) {\n\(childLines)\n\(indent)}"
+  else
+    "\(indent)\(node.name) = \(node.value!!)"
+
+function renderDocument(nodes: Listing<HyprNode>): String =
+  nodes.toList()
+    .map((n) -> renderNode(n, 0))
+    .join("\n") + "\n"

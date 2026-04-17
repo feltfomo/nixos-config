@@ -1,0 +1,20 @@
+open module pluginsIndex
+
+local pluginSource = "https://github.com/noctalia-dev/noctalia-plugins"
+
+pluginsIndex {
+  version = 2
+  sources = new Listing {
+    new Dynamic {
+      enabled = true
+      name = "Noctalia Plugins"
+      url = pluginSource
+    }
+  }
+  states {
+    clipper                { enabled = true; sourceUrl = pluginSource }
+    ["keybind-cheatsheet"] { enabled = true; sourceUrl = pluginSource }
+    ["zed-provider"]       { enabled = true; sourceUrl = pluginSource }
+    ["submap-osd"]         { enabled = true; sourceUrl = pluginSource }
+  }
+}

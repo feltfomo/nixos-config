@@ -1,0 +1,10 @@
+module mprocs
+
+log_dir = "~/.local/share/mprocs/logs"
+hide_keymap_window = false
+mouse_scroll_speed = 3
+scrollback = 2000
+
+output {
+  renderer = new YamlRenderer {}
+}

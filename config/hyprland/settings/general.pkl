@@ -1,0 +1,14 @@
+open module general
+import ".../libs/hyprlang.pkl" as r
+
+generalNodes: Listing<r.HyprNode> = new {
+  new {
+    name = "general"
+    children = new {
+      new { name = "gaps_in"; value = "8" }
+      new { name = "gaps_out"; value = "16" }
+      new { name = "border_size"; value = "2" }
+      new { name = "layout"; value = "dwindle" }
+    }
+  }
+}

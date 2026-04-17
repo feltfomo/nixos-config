@@ -1,0 +1,17 @@
+open module gestures
+
+import ".../libs/kdl.pkl" as r
+
+gesturesNodes: Listing<r.KdlNode> = new {
+  new {
+    name = "gestures"
+    children = new {
+      new {
+        name = "hot-corners"
+        children = new {
+          new { name = "off"; flag = true }
+        }
+      }
+    }
+  }
+}

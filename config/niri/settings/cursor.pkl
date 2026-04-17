@@ -1,0 +1,17 @@
+open module cursor
+
+import ".../libs/kdl.pkl" as r
+
+// From _config.nix: cursor.name and cursor.size
+local xcursorTheme = "BreezeX-RosePine-Linux"
+local xcursorSize = 24
+
+cursorNodes: Listing<r.KdlNode> = new {
+  new {
+    name = "cursor"
+    children = new {
+      new { name = "xcursor-theme"; args = new { xcursorTheme } }
+      new { name = "xcursor-size"; args = new { xcursorSize } }
+    }
+  }
+}

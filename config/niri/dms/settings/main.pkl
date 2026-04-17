@@ -1,0 +1,29 @@
+amends "pkl:base"
+
+import "../../../config.pkl" as cfg
+
+// Glob-import all sibling fragments — new fragments are picked up automatically.
+import* "./*.pkl" as fragments
+
+output {
+  value = new Dynamic {
+    // Spread every fragment into the output in a stable order.
+    ...fragments["./appearance.pkl"].toDynamic()
+    ...fragments["./bar.pkl"].toDynamic()
+    ...fragments["./workspace.pkl"].toDynamic()
+    ...fragments["./dock.pkl"].toDynamic()
+    ...fragments["./launcher.pkl"].toDynamic()
+    ...fragments["./notifications.pkl"].toDynamic()
+    ...fragments["./lock.pkl"].toDynamic()
+    ...fragments["./misc.pkl"].toDynamic()
+
+    fontFamily     = cfg.font
+    monoFontFamily = cfg.mono_font
+    fontWeight     = cfg.font_weight
+    fontScale      = cfg.font_scale
+    use24HourClock = cfg.use_24h
+    showSeconds    = cfg.show_seconds
+    padHours12Hour = cfg.pad_hours_12h
+    firstDayOfWeek = cfg.first_day_of_week
+  }
+}

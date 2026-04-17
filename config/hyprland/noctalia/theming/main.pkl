@@ -1,0 +1,25 @@
+amends "pkl:base"
+
+import "template-registry.pkl"                  as registry
+import ".../common/theming/kitty.pkl"           as kitty
+import ".../common/theming/hyprland-colors.pkl" as hyprlandColors
+import ".../common/theming/zed-theme.pkl"       as zedTheme
+import ".../common/theming/satty.pkl"           as satty
+import ".../common/theming/nvim-colors.pkl"     as nvimColors
+import ".../common/theming/lualine.pkl"         as lualine
+import ".../common/theming/foot-colors.pkl"     as footColors
+import ".../common/theming/ghostty.pkl"         as ghostty
+
+output {
+  files {
+    ["user-templates.toml"]  = registry.output
+    ["kitty-colors.conf"]    = kitty.output
+    ["hyprland-colors.conf"] = hyprlandColors.output
+    ["zed-theme.json"]       = zedTheme.output
+    ["satty.css"]            = satty.output
+    ["nvim-colors.lua"]      = nvimColors.output
+    ["lualine-colors.lua"]   = lualine.output
+    ["foot-colors.ini"]      = footColors.output
+    ["ghostty-colors"]       = ghostty.output
+  }
+}

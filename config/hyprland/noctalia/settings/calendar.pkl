@@ -1,0 +1,9 @@
+open module calendar
+
+calendar {
+  cards = new Listing {
+    new Dynamic { enabled = true;  id = "calendar-header-card" }
+    new Dynamic { enabled = true;  id = "calendar-month-card" }
+    new Dynamic { enabled = true;  id = "weather-card" }
+  }
+}

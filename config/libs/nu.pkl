@@ -1,0 +1,54 @@
+/// Nushell renderer for .nu config output.
+/// Supports: records, lists, strings, booleans, ints, floats, null,
+/// closures (raw expressions), and $env assignments.
+open module renderer
+
+import "pkl:base"
+
+/// A raw nushell expression — emitted verbatim, no quoting.
+/// Use for closures, pipeline expressions, etc.
+class RawExpr {
+  value: String
+}
+
+/// Render a nushell value to its string representation
+function renderValue(v: Any, depth: Int): String =
+  if (v is Boolean) v.toString()
+  else if (v is Int) v.toString()
+  else if (v is Float) v.toString()
+  else if (v == null) "null"
+  else if (v is RawExpr) (v as RawExpr).value
+  else if (v is Mapping) renderRecord(v as Mapping<String, Any>, depth)
+  else if (v is Dynamic) renderRecord((v as Dynamic).toMap() as Mapping<String, Any>, depth)
+  else if (v is Listing) renderList(v as Listing<Any>, depth)
+  else if (v is List) renderList(v as List<Any>, depth)
+  else "\"\(v)\""
+
+/// Render a record { key: value ... }
+local function renderRecord(m: Mapping<String, Any>, depth: Int): String =
+  let(indent = "  ".repeat(depth))
+  let(innerIndent = "  ".repeat(depth + 1))
+  let(entries =
+    m.keys.toList()
+      .map((k) -> "\(innerIndent)\(k): \(renderValue(m[k], depth + 1))")
+      .join("\n")
+  )
+  "{\n\(entries)\n\(indent)}"
+
+/// Render a list [ value value ... ]
+local function renderList(items: List<Any>, depth: Int): String =
+  let(innerIndent = "  ".repeat(depth + 1))
+  let(entries =
+    items
+      .map((v) -> "\(innerIndent)\(renderValue(v, depth + 1))")
+      .join("\n")
+  )
+  "[\n\(entries)\n\(  "  ".repeat(depth))]"
+
+/// Render a top-level $env.X = value assignment
+function renderEnvAssignment(key: String, value: Any): String =
+  "$env.\(key) = \(renderValue(value, 0))"
+
+/// Render a top-level $env.config = { ... } block
+function renderConfig(config: Mapping<String, Any>): String =
+  "$env.config = \(renderRecord(config, 0))\n"

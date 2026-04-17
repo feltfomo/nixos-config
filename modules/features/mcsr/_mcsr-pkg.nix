@@ -30,7 +30,8 @@ stdenv.mkDerivation {
     install -Dm644 $src $out/share/mcsr-launcher/MCSRLauncher.jar
 
     makeWrapper ${jdk21}/bin/java $out/bin/mcsr-launcher \
-      --add-flags "-jar $out/share/mcsr-launcher/MCSRLauncher.jar"
+      --add-flags "-jar $out/share/mcsr-launcher/MCSRLauncher.jar" \
+      --set _JAVA_AWT_WM_NONREPARENTING 1
 
     install -Dm644 ${./assets/mcsr.png} \
       $out/share/icons/hicolor/256x256/apps/mcsr-launcher.png

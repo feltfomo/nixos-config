@@ -1,0 +1,28 @@
+open module control_center
+
+controlCenter {
+  position = "close_to_bar_button"
+  diskPath = "/"
+  shortcuts {
+    left  = new Listing {
+      new Dynamic { id = "Network" }
+      new Dynamic { id = "Bluetooth" }
+      new Dynamic { id = "WallpaperSelector" }
+      new Dynamic { id = "NoctaliaPerformance" }
+    }
+    right = new Listing {
+      new Dynamic { id = "Notifications" }
+      new Dynamic { id = "PowerProfile" }
+      new Dynamic { id = "KeepAwake" }
+      new Dynamic { id = "NightLight" }
+    }
+  }
+  cards = new Listing {
+    new Dynamic { enabled = true;  id = "profile-card" }
+    new Dynamic { enabled = true;  id = "shortcuts-card" }
+    new Dynamic { enabled = true;  id = "audio-card" }
+    new Dynamic { enabled = false; id = "brightness-card" }
+    new Dynamic { enabled = true;  id = "weather-card" }
+    new Dynamic { enabled = true;  id = "media-sysmon-card" }
+  }
+}

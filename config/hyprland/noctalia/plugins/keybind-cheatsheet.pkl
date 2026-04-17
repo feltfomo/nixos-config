@@ -1,0 +1,6 @@
+open module keybindCheatsheet
+
+keybindCheatsheet {
+  cheatsheetData = new Listing {}
+  detectedCompositor = "hyprland"
+}

@@ -1,0 +1,26 @@
+open module rules
+import ".../libs/hyprlang.pkl" as r
+
+rulesNodes: Listing<r.HyprNode> = new {
+  new { name = "windowrule"; value = "float on, center on, match:class com.gabm.satty" }
+  new { name = "source"; value = "~/.config/hypr/noctalia-colors.conf" }
+  new {
+    name = "layerrule"
+    children = new {
+      new { name = "name"; value = "noctalia" }
+      new { name = "match:namespace"; value = "noctalia-background-.*$" }
+      new { name = "ignore_alpha"; value = "0.5" }
+      new { name = "blur"; value = "true" }
+      new { name = "blur_popups"; value = "true" }
+    }
+  }
+  new {
+    name = "layerrule"
+    children = new {
+      new { name = "name"; value = "submap-osd" }
+      new { name = "match:namespace"; value = "submap-osd" }
+      new { name = "blur"; value = "true" }
+      new { name = "ignore_alpha"; value = "0.1" }
+    }
+  }
+}

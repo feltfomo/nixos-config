@@ -1,0 +1,40 @@
+open module layout
+
+import ".../libs/kdl.pkl" as r
+
+// From _theme.nix: colors.love and colors.overlay (rose-pine static)
+local borderActive = "#eb6f92"
+local borderInactive = "#26233a"
+
+layoutNodes: Listing<r.KdlNode> = new {
+  new {
+    name = "layout"
+    children = new {
+      new { name = "gaps"; args = new { 8 } }
+      new { name = "background-color"; args = new { "transparent" } }
+      new { name = "always-center-single-column"; flag = true }
+      new {
+        name = "focus-ring"
+        children = new {
+          new { name = "off"; flag = true }
+        }
+      }
+      new {
+        name = "border"
+        children = new {
+          new { name = "width"; args = new { 2 } }
+          new { name = "active-color"; args = new { borderActive } }
+          new { name = "inactive-color"; args = new { borderInactive } }
+        }
+      }
+      new {
+        name = "blur"
+        children = new {
+          new { name = "passes"; args = new { 4 } }
+          new { name = "radius"; args = new { 3 } }
+          new { name = "noise"; args = new { 0.02 } }
+        }
+      }
+    }
+  }
+}

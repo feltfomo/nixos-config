@@ -1,23 +1,24 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, cmark
-, extra-cmake-modules
-, gamemode
-, jdk17
-, kdePackages
-, libarchive
-, ninja
-, qrencode
-, stripJavaArchivesHook
-, tomlplusplus
-, vulkan-headers
-, zlib
-, lib
-, msaClientID ? null
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  cmark,
+  extra-cmake-modules,
+  gamemode,
+  jdk17,
+  kdePackages,
+  libarchive,
+  ninja,
+  qrencode,
+  stripJavaArchivesHook,
+  tomlplusplus,
+  vulkan-headers,
+  zlib,
+  lib,
+  msaClientID ? null,
 }:
 let
-  version = "11.0.0";
+  version = "11.0.2";
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "libnbtplusplus";
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = version;
-    hash = "sha256-hjl0GUmAwcxqGMhvrHux4kWfOZWJvDV+SqOhyYwsO6o=";
+    hash = "sha256-GvAfrZxQSlBnCJ59nvK87jDTVo60D8n25K42SokE1q8=";
   };
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
@@ -58,7 +59,8 @@ stdenv.mkDerivation {
   ];
   cmakeFlags = [
     (lib.cmakeFeature "Launcher_BUILD_PLATFORM" "fomonix")
-  ] ++ lib.optionals (msaClientID != null) [
+  ]
+  ++ lib.optionals (msaClientID != null) [
     (lib.cmakeFeature "Launcher_MSA_CLIENT_ID" (toString msaClientID))
   ];
   doCheck = true;

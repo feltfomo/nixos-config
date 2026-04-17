@@ -1,0 +1,10 @@
+amends "pkl:base"
+
+// Glob-import all sibling fragments — new plugins are picked up automatically.
+import* "./*.pkl" as fragments
+
+output {
+  value = new Dynamic {
+    ...fragments["./clipboardPlus.pkl"].toDynamic()
+  }
+}

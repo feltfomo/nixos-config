@@ -1,0 +1,6 @@
+open module plugins
+
+plugins {
+  autoUpdate = false
+  notifyUpdates = true
+}

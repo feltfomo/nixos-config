@@ -1,0 +1,148 @@
+open module binds
+
+import ".../libs/kdl.pkl" as r
+
+// Store path placeholders — substituted by pkgs.substituteAll in Nix
+local kittyBin = "@kittyBin@"
+local firefoxBin = "@firefoxBin@"
+
+// Helper: bind with a bare action flag (no args)
+local function simpleBind(key: String, action: String): r.KdlNode = new {
+  name = key
+  inline = true
+  children = new Listing<r.KdlNode> {
+    new { name = action; semicolon = true }
+  }
+}
+
+// Helper: bind with an action that takes a string arg, e.g. set-column-width "-5%"
+local function actionBind(key: String, action: String, arg: String): r.KdlNode = new {
+  name = key
+  inline = true
+  children = new Listing<r.KdlNode> {
+    new { name = action; args = new Listing<Any> { arg }; semicolon = true }
+  }
+}
+
+// Helper: bind that spawns a single binary
+local function spawnBind(key: String, bin: String): r.KdlNode = new {
+  name = key
+  inline = true
+  children = new Listing<r.KdlNode> {
+    new { name = "spawn"; args = new Listing<Any> { bin }; semicolon = true }
+  }
+}
+
+// Helper: DMS ipc bind with hotkey-overlay-title attribute
+local function dmsBind(key: String, title: String, ipcArgs: Listing<String>): r.KdlNode = new {
+  name = key
+  attrs = new Mapping<String, Any> { ["hotkey-overlay-title"] = title }
+  children = new Listing<r.KdlNode> {
+    new {
+      name = "spawn"
+      args = new Listing<Any> { "dms"; "ipc"; "call"; ...ipcArgs }
+      semicolon = true
+    }
+  }
+}
+
+// Helper: bind with allow-when-locked + DMS ipc spawn
+local function lockedDmsBind(key: String, ipcArgs: Listing<String>): r.KdlNode = new {
+  name = key
+  attrs = new Mapping<String, Any> { ["allow-when-locked"] = true }
+  children = new Listing<r.KdlNode> {
+    new {
+      name = "spawn"
+      args = new Listing<Any> { "dms"; "ipc"; "call"; ...ipcArgs }
+      semicolon = true
+    }
+  }
+}
+
+bindsNodes: Listing<r.KdlNode> = new {
+  new {
+    name = "binds"
+    children = new Listing<r.KdlNode> {
+      // DMS
+      dmsBind("Mod+Space", "Application Launcher", new Listing<String> { "spotlight"; "toggle" })
+      dmsBind("Mod+C", "Clipboard Manager", new Listing<String> { "clipboard"; "toggle" })
+      dmsBind("Mod+N", "Notification Center", new Listing<String> { "notifications"; "toggle" })
+      dmsBind("Mod+Comma", "Settings", new Listing<String> { "settings"; "focusOrToggle" })
+      dmsBind("Mod+Y", "Browse Wallpapers", new Listing<String> { "dankdash"; "wallpaper" })
+      dmsBind("Mod+Alt+L", "Lock Screen", new Listing<String> { "lock"; "lock" })
+
+      // Apps
+      spawnBind("Mod+T", kittyBin)
+      spawnBind("Mod+W", firefoxBin)
+
+      // Window management
+      simpleBind("Mod+Q", "close-window")
+      simpleBind("Mod+F", "maximize-column")
+      simpleBind("Mod+Shift+F", "fullscreen-window")
+      simpleBind("Mod+V", "toggle-window-floating")
+      simpleBind("Mod+grave", "toggle-overview")
+
+      // Focus columns
+      simpleBind("Mod+H", "focus-column-left")
+      simpleBind("Mod+L", "focus-column-right")
+      simpleBind("Mod+Left", "focus-column-left")
+      simpleBind("Mod+Right", "focus-column-right")
+
+      // Focus windows within column
+      simpleBind("Mod+J", "focus-window-down")
+      simpleBind("Mod+K", "focus-window-up")
+      simpleBind("Mod+Down", "focus-window-down")
+      simpleBind("Mod+Up", "focus-window-up")
+
+      // Focus workspaces
+      simpleBind("Mod+Shift+J", "focus-workspace-down")
+      simpleBind("Mod+Shift+K", "focus-workspace-up")
+      simpleBind("Mod+Shift+Down", "focus-workspace-down")
+      simpleBind("Mod+Shift+Up", "focus-workspace-up")
+
+      // Focus monitors
+      simpleBind("Mod+Alt+Left", "focus-monitor-left")
+      simpleBind("Mod+Alt+Right", "focus-monitor-right")
+
+      // Move columns
+      simpleBind("Mod+Ctrl+H", "move-column-left-or-to-monitor-left")
+      simpleBind("Mod+Ctrl+L", "move-column-right-or-to-monitor-right")
+      simpleBind("Mod+Ctrl+Left", "move-column-left-or-to-monitor-left")
+      simpleBind("Mod+Ctrl+Right", "move-column-right-or-to-monitor-right")
+
+      // Move windows to workspaces
+      simpleBind("Mod+Ctrl+J", "move-window-to-workspace-down")
+      simpleBind("Mod+Ctrl+K", "move-window-to-workspace-up")
+      simpleBind("Mod+Ctrl+Down", "move-window-to-workspace-down")
+      simpleBind("Mod+Ctrl+Up", "move-window-to-workspace-up")
+
+      // Move to monitors
+      simpleBind("Mod+Shift+Alt+Left", "move-window-to-monitor-left")
+      simpleBind("Mod+Shift+Alt+Right", "move-window-to-monitor-right")
+
+      // Consume/expel
+      simpleBind("Mod+BracketLeft", "consume-window-into-column")
+      simpleBind("Mod+BracketRight", "expel-window-from-column")
+
+      // Resize
+      actionBind("Mod+Shift+H", "set-column-width", "-5%")
+      actionBind("Mod+Shift+L", "set-column-width", "+5%")
+      actionBind("Mod+Shift+Left", "set-column-width", "-5%")
+      actionBind("Mod+Shift+Right", "set-column-width", "+5%")
+      actionBind("Mod+Ctrl+Shift+Up", "set-window-height", "+5%")
+      actionBind("Mod+Ctrl+Shift+Down", "set-window-height", "-5%")
+
+      // System
+      simpleBind("Mod+Shift+E", "quit")
+      simpleBind("Mod+Shift+P", "power-off-monitors")
+      simpleBind("Print", "screenshot")
+      simpleBind("Ctrl+Print", "screenshot-screen")
+      simpleBind("Alt+Print", "screenshot-window")
+
+      // Volume
+      lockedDmsBind("Mod+Equal", new Listing<String> { "audio"; "increment"; "3" })
+      lockedDmsBind("Mod+Minus", new Listing<String> { "audio"; "decrement"; "3" })
+      lockedDmsBind("Mod+Shift+M", new Listing<String> { "audio"; "mute" })
+    }
+  }
+}

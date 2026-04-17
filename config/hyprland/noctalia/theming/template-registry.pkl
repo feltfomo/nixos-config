@@ -1,0 +1,58 @@
+amends "pkl:base"
+
+import ".../common/theming/matugen.pkl" as matugen
+import ".../libs/toml.pkl" as toml
+import ".../config.pkl" as cfg
+
+local home = "/home/\(cfg.username)"
+local templateDir = "\(home)/.config-hyprland/noctalia/templates"
+
+output {
+  renderer = new matugen.PreambleRenderer {
+    inner = new toml.Renderer {}
+  }
+  value = new Mapping {
+    ["templates"] = new Mapping {
+      ["kitty"] = new Mapping {
+        ["input_path"]  = "\(templateDir)/kitty-colors.conf"
+        ["output_path"] = "\(home)/.config/kitty/noctalia-colors.conf"
+        ["post_hook"]   = "/run/current-system/sw/bin/pkill -USR1 kitty 2>/dev/null; true"
+      }
+      ["hyprland"] = new Mapping {
+        ["input_path"]  = "\(templateDir)/hyprland-colors.conf"
+        ["output_path"] = "\(home)/.config/hypr/noctalia-colors.conf"
+        ["post_hook"]   = "hyprctl reload 2>/dev/null; true"
+      }
+      ["zed"] = new Mapping {
+        ["input_path"]  = "\(templateDir)/zed-theme.json"
+        ["output_path"] = "\(home)/.config/zed/themes/noctalia.json"
+        ["post_hook"]   = "true"
+      }
+      ["satty"] = new Mapping {
+        ["input_path"]  = "\(templateDir)/satty.css"
+        ["output_path"] = "\(home)/.config/satty/overrides.css"
+        ["post_hook"]   = "true"
+      }
+      ["nvim"] = new Mapping {
+        ["input_path"]  = "\(templateDir)/nvim-colors.lua"
+        ["output_path"] = "\(home)/.config/nvim/noctalia-colors.lua"
+        ["post_hook"]   = #"bash -c 'for f in /run/user/$(id -u)/nvim.*.0; do nvim --server "$f" --remote-send "<cmd>source ~/.config/nvim/noctalia-colors.lua<cr>" 2>/dev/null; done; true'"#
+      }
+      ["lualine"] = new Mapping {
+        ["input_path"]  = "\(templateDir)/lualine-colors.lua"
+        ["output_path"] = "\(home)/.config/nvim/lualine-colors.lua"
+        ["post_hook"]   = #"bash -c 'for f in /run/user/$(id -u)/nvim.*.0; do nvim --server "$f" --remote-send "<cmd>source ~/.config/nvim/lualine-colors.lua<cr>" 2>/dev/null; done; true'"#
+      }
+      ["foot"] = new Mapping {
+        ["input_path"]  = "\(templateDir)/foot-colors.ini"
+        ["output_path"] = "\(home)/.config/foot/noctalia-colors.ini"
+        ["post_hook"]   = "true"
+      }
+      ["ghostty"] = new Mapping {
+        ["input_path"]  = "\(templateDir)/ghostty-colors"
+        ["output_path"] = "\(home)/.config/ghostty/noctalia-colors"
+        ["post_hook"]   = "true"
+      }
+    }
+  }
+}

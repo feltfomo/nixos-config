@@ -1,0 +1,46 @@
+amends "pkl:base"
+
+import ".../libs/nu.pkl" as nu
+
+local configData: Mapping<String, Any> = new {
+  ["show_banner"] = false
+  ["completions"] = new Mapping<String, Any> {
+    ["case_sensitive"] = false
+    ["quick"] = true
+    ["partial"] = true
+    ["algorithm"] = "fuzzy"
+    ["external"] = new Mapping<String, Any> {
+      ["enable"] = true
+      ["completer"] = new nu.RawExpr { value = "{|spans| carapace $spans.0 nushell $spans | from json }" }
+    }
+  }
+  ["history"] = new Mapping<String, Any> {
+    ["max_size"] = 10000
+    ["file_format"] = "sqlite"
+  }
+  ["cursor_shape"] = new Mapping<String, Any> {
+    ["emacs"] = new nu.RawExpr { value = "line" }
+    ["vi_insert"] = new nu.RawExpr { value = "line" }
+    ["vi_normal"] = new nu.RawExpr { value = "block" }
+  }
+}
+
+local envData: Mapping<String, Any> = new {
+  ["EDITOR"] = "nvim"
+  ["PATH"] = new nu.RawExpr {
+    value = #"($env.PATH | split row (char esep) | prepend ($env.HOME + "/.local/bin"))"#
+  }
+}
+
+output {
+  files {
+    ["config.nu"] {
+      text = nu.renderConfig(configData)
+    }
+    ["env.nu"] {
+      text = envData.keys.toList()
+        .map((k) -> nu.renderEnvAssignment(k, envData[k]))
+        .join("\n") + "\n"
+    }
+  }
+}

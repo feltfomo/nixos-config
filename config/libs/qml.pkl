@@ -1,0 +1,200 @@
+/// QML renderer for Noctalia plugin output.
+/// Supports arbitrary ordering of all body members via a single `body`
+/// listing — properties, signals, anchors blocks, child objects, and
+/// JS handlers all appear in exactly the order you declare them.
+open module renderer
+
+import "pkl:base"
+
+/// A raw JS/QML expression emitted verbatim (no quotes).
+/// Use for enum refs, Qt.alpha(...), function calls, object refs, etc.
+class Expr {
+  value: String
+}
+
+/// A raw expression whose value is placed on the next line, indented one
+/// level deeper. Use for multi-token inline objects like SplitParser { ... }
+/// that should not share a line with the property name.
+class BlockExpr {
+  value: String
+}
+
+/// A multi-line JS block (function body, signal handler, etc.)
+/// Lines are indented one level deeper than the containing property;
+/// the closing brace aligns with the property name.
+class JsBlock {
+  lines: Listing<String>
+}
+
+/// A single property assignment: `name: value`.
+/// For function declarations use a key starting with "function " —
+/// the renderer emits `function foo() { ... }` (space not colon).
+class Prop {
+  name:  String
+  value: Any   // String | Int | Float | Boolean | Expr | BlockExpr | JsBlock
+}
+
+/// A `required property <type> <n>` declaration.
+class RequiredProp {
+  typeName: String   // e.g. "var", "int", "string"
+  propName: String   // e.g. "modelData"
+}
+
+/// A `signal name()` declaration.
+class Signal {
+  name: String
+}
+
+/// A grouped `anchors { ... }` block.
+/// Entries are emitted in declaration order.
+class AnchorsBlock {
+  entries: Listing<Prop>
+}
+
+/// A child object nested inside the containing object's body.
+class Child {
+  obj: QmlObject
+}
+
+// Note: BodyItem typealias intentionally omitted.
+// Pkl rejects recursive typealiases: BodyItem → Child → QmlObject → body: Listing<BodyItem>.
+// body uses Listing<Any> instead; runtime `is` dispatch in renderBodyItem is unchanged.
+
+/// A single QML object (component instance).
+/// `id` is always emitted first, before all body members, matching QML convention.
+/// All other members go in `body` in declaration order.
+class QmlObject {
+  /// The QML type name, e.g. "Item", "Rectangle", "PanelWindow".
+  /// Use "Behavior on opacity" for Behavior attachments.
+  type: String
+
+  /// Optional `id:` declaration — always emitted as the first line of the body.
+  id: String?
+
+  /// Ordered body: mix Prop, RequiredProp, Signal, AnchorsBlock, Child freely.
+  body: Listing<Any>?
+
+  /// When true, renders the object on a single line with semicolon-separated
+  /// props: `Type { prop: val; prop: val }`. Use for compact leaf objects
+  /// like `NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }`.
+  inline: Boolean = false
+}
+
+/// A complete QML file: import lines followed by a single root object.
+class QmlDocument {
+  /// Qt6-style imports, e.g. "QtQuick", "Quickshell.Io".
+  /// Emitted as `import <entry>` with no version numbers.
+  imports: Listing<String>
+
+  /// The single root object of the file.
+  root: QmlObject
+}
+
+local function renderValue(value: Any, depth: Int): String =
+  if (value is Boolean)    value.toString()
+  else if (value is Int)   value.toString()
+  else if (value is Float) value.toString()
+  else if (value is Expr)  (value as Expr).value
+  else if (value is BlockExpr) (value as BlockExpr).value  // placement handled in renderProp
+  else if (value is JsBlock) renderJsBlock(value as JsBlock, depth)
+  else if (value is QmlObject) renderObject(value as QmlObject, 0).trim()
+  else "\"\(value)\""
+
+local function renderJsBlock(block: JsBlock, depth: Int): String =
+  let (bodyIndent  = "    ".repeat(depth + 1))
+  let (closeIndent = "    ".repeat(depth))
+  "{\n" + block.lines.toList().map((l) -> "\(bodyIndent)\(l)").join("\n") + "\n\(closeIndent)}"
+
+local function renderProp(p: Prop, depth: Int): String =
+  if (p.name.startsWith("function "))
+    "\(p.name) \(renderValue(p.value, depth))"
+  else if (p.value is BlockExpr)
+    "\(p.name): \((p.value as BlockExpr).value)"
+  else
+    "\(p.name): \(renderValue(p.value, depth))"
+
+local function renderInlineObject(obj: QmlObject): String =
+  let (props =
+    if (obj.body != null)
+      obj.body!!.toList()
+        .map((item) ->
+          if (item is Prop) renderProp(item as Prop, 0)
+          else item.toString())
+        .join("; ")
+    else "")
+  "\(obj.type) { \(props) }"
+
+local function renderBodyItem(item: Any, depth: Int): String =
+  let (inner = "    ".repeat(depth + 1))
+  if (item is Prop)
+    "\(inner)\(renderProp(item as Prop, depth + 1))"
+  else if (item is RequiredProp)
+    let (rp = item as RequiredProp)
+    "\(inner)required property \(rp.typeName) \(rp.propName)"
+  else if (item is Signal)
+    "\(inner)signal \((item as Signal).name)()"
+  else if (item is AnchorsBlock)
+    let (blockInner = "    ".repeat(depth + 2))
+    let (ab = item as AnchorsBlock)
+    "\(inner)anchors {\n" +
+    ab.entries.toList()
+      .map((p) -> "\(blockInner)\(renderProp(p, depth + 2))")
+      .join("\n") +
+    "\n\(inner)}"
+  else
+    let (obj = (item as Child).obj)
+    if (obj.inline) "\(inner)\(renderInlineObject(obj))"
+    else renderObject(obj, depth + 1)
+
+/// Render a QmlObject and its full body at the given indent depth.
+function renderObject(obj: QmlObject, depth: Int): String =
+  let (indent = "    ".repeat(depth))
+  let (inner  = "    ".repeat(depth + 1))
+  let (idLine =
+    if (obj.id != null) "\(inner)id: \(obj.id!!)\n"
+    else "")
+  let (bodyText =
+    if (obj.body != null)
+      obj.body!!.toList()
+        .map((item) -> renderBodyItem(item, depth) + "\n")
+        .join("")
+    else "")
+  "\(indent)\(obj.type) {\n\(idLine)\(bodyText)\(indent)}"
+
+/// Render a complete QmlDocument to a QML source string.
+function renderDocument(doc: QmlDocument): String =
+  let (importLines =
+    doc.imports.toList()
+      .map((i) -> "import \(i)")
+      .join("\n"))
+  let (rootText = renderObject(doc.root, 0))
+  "\(importLines)\n\n\(rootText)\n"
+
+/// Shorthand: string property value (quoted in output).
+function prop(n: String, v: String): Prop = new { name = n; value = v }
+
+/// Shorthand: expression property value (emitted verbatim, no quotes).
+function expr(n: String, v: String): Prop = new { name = n; value = new Expr { value = v } }
+
+/// Shorthand: block-expression property — value placed on next line, indented.
+/// Use for inline QML objects like `stdout: SplitParser { ... }`.
+function blockExpr(n: String, v: String): Prop = new { name = n; value = new BlockExpr { value = v } }
+
+/// Shorthand: JS block property or function declaration.
+/// Pass `new Listing<String> { "line1"; "line2" }` as `ls`.
+function block(n: String, ls: Listing<String>): Prop =
+  new { name = n; value = new JsBlock { lines = ls } }
+
+/// Shorthand: signal declaration.
+function signal(n: String): Signal = new Signal { name = n }
+
+/// Shorthand: required property declaration.
+function required(t: String, n: String): RequiredProp =
+  new RequiredProp { typeName = t; propName = n }
+
+/// Shorthand: child object body member.
+function child(o: QmlObject): Child = new Child { obj = o }
+
+/// Shorthand: inline single-line child object.
+/// Renders as `Type { prop: val; prop: val }` on one line.
+function inlineChild(o: QmlObject): Child = new Child { obj = (o) { inline = true } }

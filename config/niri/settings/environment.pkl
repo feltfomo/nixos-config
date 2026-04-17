@@ -1,0 +1,13 @@
+open module environment
+
+import ".../libs/kdl.pkl" as r
+
+environmentNodes: Listing<r.KdlNode> = new {
+  new {
+    name = "environment"
+    children = new {
+      new { name = "XDG_CURRENT_DESKTOP"; args = new { "niri" } }
+      new { name = "ELECTRON_OZONE_PLATFORM_HINT"; args = new { "auto" } }
+    }
+  }
+}

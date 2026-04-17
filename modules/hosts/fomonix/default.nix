@@ -27,6 +27,7 @@ let
     self.nixosModules.prism
     self.nixosModules.obsidian
     self.nixosModules.obs
+    self.nixosModules.helium
     inputs.hjem.nixosModules.default
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence

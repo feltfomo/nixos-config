@@ -1,0 +1,9 @@
+amends "pkl:base"
+import ".../config.pkl" as cfg
+
+output {
+  text = """
+    font_family      \(cfg.mono_font)
+    font_size        \(cfg.terminal_font_size)
+    """
+}

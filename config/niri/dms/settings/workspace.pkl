@@ -1,0 +1,34 @@
+open module workspace
+
+showWorkspaceIndex         = false
+showWorkspaceName          = false
+showWorkspacePadding       = false
+workspaceScrolling         = false
+showWorkspaceApps          = false
+workspaceDragReorder       = true
+maxWorkspaceIcons          = 3
+workspaceAppIconSizeOffset = 0
+groupWorkspaceApps         = false
+workspaceFollowFocus       = false
+showOccupiedWorkspacesOnly = false
+reverseScrolling           = false
+dwlShowAllTags             = false
+workspaceActiveAppHighlightEnabled = false
+workspaceColorMode          = "default"
+workspaceOccupiedColorMode  = "none"
+workspaceUnfocusedColorMode = "default"
+workspaceUrgentColorMode    = "default"
+workspaceFocusedBorderEnabled   = false
+workspaceFocusedBorderColor     = "primary"
+workspaceFocusedBorderThickness = 2
+workspaceNameIcons {}
+
+runningAppsCompactMode      = true
+barMaxVisibleApps           = 0
+barMaxVisibleRunningApps    = 0
+barShowOverflowBadge        = true
+runningAppsCurrentWorkspace = true
+runningAppsGroupByApp       = false
+runningAppsCurrentMonitor   = false
+focusedWindowCompactMode    = false
+centeringMode               = "index"

@@ -1,0 +1,100 @@
+open module rules
+
+import ".../libs/kdl.pkl" as r
+
+// From _config.nix: home = "/home/feltfomo"
+local home = "/home/feltfomo"
+
+rulesNodes: Listing<r.KdlNode> = new {
+  // Default corner radius for all windows
+  new {
+    name = "window-rule"
+    children = new {
+      new { name = "geometry-corner-radius"; args = new { 12 } }
+      new { name = "clip-to-geometry"; args = new { true } }
+    }
+  }
+  // GNOME apps — no border background
+  new {
+    name = "window-rule"
+    children = new {
+      new { name = "match"; attrs = new { ["app-id"] = ##"r#"^org\.gnome\."#"## } }
+      new { name = "draw-border-with-background"; args = new { false } }
+      new { name = "geometry-corner-radius"; args = new { 12 } }
+      new { name = "clip-to-geometry"; args = new { true } }
+    }
+  }
+  // Terminals and browsers — no border background
+  new {
+    name = "window-rule"
+    children = new {
+      new { name = "match"; attrs = new { ["app-id"] = "com.mitchellh.ghostty" } }
+      new { name = "match"; attrs = new { ["app-id"] = "kitty" } }
+      new { name = "match"; attrs = new { ["app-id"] = "foot" } }
+      new { name = "match"; attrs = new { ["app-id"] = "brave-browser" } }
+      new { name = "match"; attrs = new { ["app-id"] = "zen-twilight" } }
+      new { name = "draw-border-with-background"; args = new { false } }
+    }
+  }
+  // Global opacity
+  new {
+    name = "window-rule"
+    children = new {
+      new { name = "opacity"; args = new { 0.9 } }
+    }
+  }
+  // Float quickshell/DMS windows
+  new {
+    name = "window-rule"
+    children = new {
+      new { name = "match"; attrs = new { ["app-id"] = ##"r#"org\.quickshell$"#"## } }
+      new { name = "open-floating"; args = new { true } }
+    }
+  }
+  // Blur all windows
+  new {
+    name = "window-rule"
+    children = new {
+      new {
+        name = "blur"
+        children = new {
+          new { name = "on"; flag = true }
+          new { name = "x-ray"; args = new { true } }
+        }
+      }
+    }
+  }
+  // DMS namespace blur
+  new {
+    name = "layer-rule"
+    children = new {
+      new { name = "match"; attrs = new { ["namespace"] = "^dms:.*$" } }
+      new {
+        name = "blur"
+        children = new {
+          new { name = "on"; flag = true }
+          new { name = "x-ray"; args = new { false } }
+          new { name = "ignore-alpha"; args = new { 0.45 } }
+        }
+      }
+    }
+  }
+  // DMS layer rules
+  new {
+    name = "layer-rule"
+    children = new {
+      new { name = "match"; attrs = new { ["namespace"] = "^quickshell$" } }
+      new { name = "place-within-backdrop"; args = new { true } }
+    }
+  }
+  // Blur wallpaper layer (DMS blur branch)
+  new {
+    name = "layer-rule"
+    children = new {
+      new { name = "match"; attrs = new { ["namespace"] = "dms:blurwallpaper" } }
+      new { name = "place-within-backdrop"; args = new { true } }
+    }
+  }
+  // colors managed at runtime by DMS matugen — overrides static border above
+  new { name = "include"; args = new { "\(home)/.config/niri/dms-colors.kdl" } }
+}

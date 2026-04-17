@@ -1,0 +1,42 @@
+open module dock
+
+import "monitors.pkl" as mon
+
+showDock                           = true
+dockAutoHide                       = false
+dockSmartAutoHide                  = false
+dockGroupByApp                     = false
+dockRestoreSpecialWorkspaceOnClick = false
+dockOpenOnOverview                 = false
+dockPosition                       = 1
+dockSpacing                        = 9
+dockBottomGap                      = -10
+dockMargin                         = 10
+dockIconSize                       = 40
+dockIndicatorStyle                 = "circle"
+dockBorderEnabled                  = true
+dockBorderColor                    = "primary"
+dockBorderOpacity                  = 1.0
+dockBorderThickness                = 1
+dockIsolateDisplays                = false
+dockLauncherEnabled                = true
+dockLauncherLogoMode               = "os"
+dockLauncherLogoCustomPath         = ""
+dockLauncherLogoColorOverride      = "primary"
+dockLauncherLogoSizeOffset         = 0
+dockLauncherLogoBrightness         = 0.5
+dockLauncherLogoContrast           = 1.0
+dockMaxVisibleApps                 = 0
+dockMaxVisibleRunningApps          = 0
+dockShowOverflowBadge              = true
+appsDockHideIndicators             = false
+appsDockColorizeActive             = false
+appsDockActiveColorMode            = "primary"
+appsDockEnlargeOnHover             = false
+appsDockEnlargePercentage          = 125
+appsDockIconSizePercentage         = 100
+
+screenPreferences {
+  dock = mon.primary
+}
+showOnLastDisplay { dock = true }

@@ -1,0 +1,11 @@
+amends "pkl:base"
+
+// Static rose-pine theme for now — will become matugen-reactive later.
+
+output {
+  text = """
+    --theme="rose-pine"
+    --paging=auto
+    --style=numbers,changes,header
+    """
+}

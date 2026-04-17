@@ -1,0 +1,26 @@
+amends "pkl:base"
+
+import "plugins-index.pkl" as idx
+import "keybind-cheatsheet.pkl" as kb
+import "submap-osd.pkl" as osd
+import ".../libs/qml.pkl" as r
+
+output {
+  files {
+    ["plugins.json"] {
+      renderer = new JsonRenderer {}
+      value = idx.pluginsIndex
+    }
+    ["keybind-cheatsheet-settings.json"] {
+      renderer = new JsonRenderer {}
+      value = kb.keybindCheatsheet
+    }
+    ["submap-osd-manifest.json"] {
+      renderer = new JsonRenderer {}
+      value = osd.manifest
+    }
+    ["submap-osd-Main.qml"] {
+      text = r.renderDocument(osd.mainQml)
+    }
+  }
+}

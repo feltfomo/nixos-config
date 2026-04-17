@@ -1,0 +1,12 @@
+open module misc
+import ".../libs/hyprlang.pkl" as r
+
+miscNodes: Listing<r.HyprNode> = new {
+  new {
+    name = "misc"
+    children = new {
+      new { name = "disable_hyprland_logo"; value = "true" }
+      new { name = "disable_splash_rendering"; value = "true" }
+    }
+  }
+}

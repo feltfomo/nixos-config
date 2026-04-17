@@ -1,0 +1,45 @@
+open module kitty
+
+import ".../common/theming/matugen.pkl" as matugen
+
+local c = "{{colors."
+local s = ".default.hex}}"
+
+local function role(r: String): String = "\(c)\(r)\(s)"
+
+hidden colors: Mapping<String, String> = new {
+  ["foreground"]              = role("on_surface")
+  ["background"]              = role("surface")
+  ["selection_foreground"]    = role("on_surface")
+  ["selection_background"]    = role("surface_variant")
+  ["cursor"]                  = role("on_surface")
+  ["cursor_text_color"]       = role("surface")
+  ["url_color"]               = role("tertiary")
+  ["active_tab_foreground"]   = role("on_surface")
+  ["active_tab_background"]   = role("surface_variant")
+  ["inactive_tab_foreground"] = role("on_surface_variant")
+  ["inactive_tab_background"] = role("surface")
+  ["active_border_color"]     = role("primary")
+  ["inactive_border_color"]   = role("surface_variant")
+  ["color0"]                  = role("surface")
+  ["color8"]                  = role("surface_variant")
+  ["color1"]                  = role("error")
+  ["color9"]                  = role("error_container")
+  ["color2"]                  = role("tertiary")
+  ["color10"]                 = role("tertiary_container")
+  ["color3"]                  = role("secondary")
+  ["color11"]                 = role("secondary_container")
+  ["color4"]                  = role("primary")
+  ["color12"]                 = role("primary_container")
+  ["color5"]                  = role("tertiary")
+  ["color13"]                 = role("tertiary_container")
+  ["color6"]                  = role("secondary")
+  ["color14"]                 = role("secondary_container")
+  ["color7"]                  = role("on_surface")
+  ["color15"]                 = role("on_surface_variant")
+}
+
+output {
+  renderer = new matugen.ConfTemplateRenderer {}
+  value = colors
+}

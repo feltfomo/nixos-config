@@ -1,0 +1,7 @@
+open module monitor
+import ".../libs/hyprlang.pkl" as r
+
+monitorNodes: Listing<r.HyprNode> = new {
+  new { name = "monitor"; value = "@primaryName@,@primaryRes@,@primaryX@x0,1" }
+  new { name = "monitor"; value = "@secondaryName@,@secondaryRes@,@secondaryX@x0,1" }
+}

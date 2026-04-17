@@ -1,0 +1,43 @@
+amends "pkl:base"
+
+import ".../libs/luagen.pkl" as lua
+
+local primary = lua.matugen("colors.primary.default.hex")
+
+local cTable: String = """
+  local c = {
+    bg       = darken(primary, 0.15),
+    bg_mid   = darken(primary, 0.25),
+    fg       = "\(lua.matugen("colors.on_surface.default.hex"))",
+    fg_muted = "\(lua.matugen("colors.on_surface_variant.default.hex"))",
+    primary  = "\(lua.matugen("colors.primary.default.hex"))",
+    secondary= "\(lua.matugen("colors.secondary.default.hex"))",
+    tertiary = "\(lua.matugen("colors.tertiary.default.hex"))",
+    error    = "\(lua.matugen("colors.error.default.hex"))",
+  }
+  """
+
+local themeTable: String = """
+  {
+        normal   = { a = { fg = c.bg, bg = c.primary,   gui = "bold" }, b = { fg = c.fg, bg = c.bg_mid }, c = { fg = c.fg, bg = c.bg } },
+        insert   = { a = { fg = c.bg, bg = c.secondary, gui = "bold" }, b = { fg = c.fg, bg = c.bg_mid }, c = { fg = c.fg, bg = c.bg } },
+        visual   = { a = { fg = c.bg, bg = c.tertiary,  gui = "bold" }, b = { fg = c.fg, bg = c.bg_mid }, c = { fg = c.fg, bg = c.bg } },
+        replace  = { a = { fg = c.bg, bg = c.error,     gui = "bold" }, b = { fg = c.fg, bg = c.bg_mid }, c = { fg = c.fg, bg = c.bg } },
+        inactive = { a = { fg = c.fg_muted, bg = c.bg }, b = { fg = c.fg_muted, bg = c.bg }, c = { fg = c.fg_muted, bg = c.bg } },
+      },
+  """
+
+output {
+  renderer = new lua.LuaCodeRenderer {}
+  value = """
+    \(lua.darkenFn)
+    local primary = "\(primary)"
+
+    \(cTable)
+    require("lualine").setup({
+      options = {
+        theme = \(themeTable)
+      },
+    })
+    """
+}

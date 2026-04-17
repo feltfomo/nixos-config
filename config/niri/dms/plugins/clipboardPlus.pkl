@@ -1,0 +1,6 @@
+open module clipboardPlus
+
+clipboardPlus {
+  enabled = true
+  panelOpacityClipboard = 100
+}

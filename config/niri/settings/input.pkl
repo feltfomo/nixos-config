@@ -1,0 +1,38 @@
+open module input
+
+import ".../libs/kdl.pkl" as r
+
+inputNodes: Listing<r.KdlNode> = new {
+  new {
+    name = "input"
+    children = new {
+      new {
+        name = "keyboard"
+        children = new {
+          new {
+            name = "xkb"
+            children = new {
+              new { name = "layout"; args = new { "us" } }
+              new { name = "options"; args = new { "caps:escape" } }
+            }
+          }
+        }
+      }
+      new {
+        name = "touchpad"
+        children = new {
+          new { name = "tap"; flag = true }
+          new { name = "natural-scroll"; flag = true }
+        }
+      }
+      new {
+        name = "mouse"
+        children = new {
+          new { name = "accel-profile"; args = new { "flat" } }
+        }
+      }
+      new { name = "focus-follows-mouse"; flag = true }
+      new { name = "warp-mouse-to-focus"; flag = true }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+amends "pkl:base"
+
+import ".../config.pkl" as cfg
+
+output {
+  text = """
+    [main]
+    font=\(cfg.mono_font):size=\(cfg.terminal_font_size)
+
+    include=/home/\(cfg.username)/.config/foot/foot-dms-colors.ini
+    """
+}

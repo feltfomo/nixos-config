@@ -8,8 +8,6 @@ in
   perSystem =
     { pkgs, lib, ... }:
     let
-      theme = import ./../../theme/_theme.nix { inherit pkgs; };
-
       zedPatched = pkgs.zed-editor.overrideAttrs (old: {
         patches = (old.patches or [ ]) ++ [ ./zed-devshell.patch ];
       });
@@ -48,17 +46,15 @@ in
   flake.nixosModules.zed =
     { pkgs, lib, ... }:
     let
-      theme = import ./../../theme/_theme.nix { inherit pkgs; };
-
       sharedSettings = {
         theme = {
           mode = "dark";
           dark = "Noctalia Dark";
           light = "Rosé Pine Dawn";
         };
-        ui_font_size = theme.fontSize.zedUi;
-        buffer_font_size = theme.fontSize.zedBuffer;
-        buffer_font_family = theme.font.name;
+        ui_font_size = 16;
+        buffer_font_size = 14;
+        buffer_font_family = "JetBrains Mono";
         vim_mode = false;
         format_on_save = "on";
         autosave = "on_focus_change";

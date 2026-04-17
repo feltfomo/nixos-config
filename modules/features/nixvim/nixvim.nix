@@ -49,6 +49,17 @@
         termguicolors = true;
         clipboard = "unnamedplus";
       };
+
+      autoCmd = [
+        {
+          event = [
+            "BufRead"
+            "BufNewFile"
+          ];
+          pattern = "*.pkl";
+          callback.__raw = ''function() vim.bo.filetype = "pkl" end'';
+        }
+      ];
     };
   };
 

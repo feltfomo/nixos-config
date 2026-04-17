@@ -1,0 +1,116 @@
+/// KDL renderer for niri config output.
+/// Supports: bare flags, string/int/float args, inline attributes,
+/// child blocks, raw string args, semicolon-terminated nodes, and include directives.
+open module renderer
+
+import "pkl:base"
+
+/// A single KDL node. All fields except `name` are optional.
+class KdlNode {
+  /// Node identifier, e.g. "gaps", "Mod+Space", "match"
+  name: String
+
+  /// Positional arguments after the node name (strings, ints, floats, booleans)
+  args: Listing<Any>?
+
+  /// Inline key=value attributes, e.g. hotkey-overlay-title="..." or allow-when-locked=true
+  attrs: Mapping<String, Any>?
+
+  /// Child nodes inside a { } block
+  children: Listing<KdlNode>?
+
+  /// Emit this node as a raw KDL string arg, e.g. r#"^org\.gnome\."#
+  /// Set on the *match* node itself — this is the raw value of the app-id attribute
+  rawAttrValue: String?
+
+  /// Terminate this node's line with a semicolon (used inside binds children)
+  semicolon: Boolean = false
+
+  /// Emit as a bare flag (no args, no braces) — just the name on its own line
+  flag: Boolean = false
+
+  /// Render children inline on one line: key attrs { child arg; child arg; }
+  inline: Boolean = false
+}
+
+/// True if a value is a KDL raw string literal (starts with r# or r##, etc.)
+local function isRawString(v: Any): Boolean =
+  v is String && (v as String).startsWith("r#")
+
+/// Render a KDL string value — booleans unquoted, numbers unquoted, strings quoted
+local function renderArg(value: Any): String =
+  if (value is Boolean) value.toString()
+  else if (value is Int) value.toString()
+  else if (value is Float) value.toString()
+  else if (isRawString(value)) value as String
+  else "\"\(value)\""
+
+/// Render inline attributes: key=value pairs, booleans and numbers unquoted,
+/// raw KDL strings emitted verbatim (no extra quotes)
+local function renderAttrs(attrs: Mapping<String, Any>): String =
+  attrs.keys.toList()
+    .map((k) ->
+      let(v = attrs[k])
+      if (v is Boolean) "\(k)=\(v)"
+      else if (v is Int) "\(k)=\(v)"
+      else if (v is Float) "\(k)=\(v)"
+      else if (isRawString(v)) "\(k)=\(v)"
+      else "\(k)=\"\(v)\""
+    )
+    .join(" ")
+
+/// Render a single child node inline (no indent, for use inside { })
+local function renderChildInline(child: KdlNode): String =
+  let(argsPart =
+    if (child.args != null)
+      " " + child.args!!.toList().map((a) -> renderArg(a)).join(" ")
+    else ""
+  )
+  let(attrsPart =
+    if (child.attrs != null)
+      " " + renderAttrs(child.attrs!!)
+    else ""
+  )
+  let(semi = if (child.semicolon) ";" else "")
+  "\(child.name)\(argsPart)\(attrsPart)\(semi)"
+
+/// Render a single node at a given indent depth
+function renderNode(node: KdlNode, depth: Int): String =
+  let(indent = "  ".repeat(depth))
+  if (node.flag)
+    "\(indent)\(node.name)"
+  else
+    let(argsPart =
+      if (node.args != null)
+        " " + node.args!!.toList().map((a) -> renderArg(a)).join(" ")
+      else ""
+    )
+    let(attrsPart =
+      if (node.attrs != null)
+        " " + renderAttrs(node.attrs!!)
+      else ""
+    )
+    let(semi = if (node.semicolon) ";" else "")
+    if (node.children != null)
+      if (node.inline)
+        let(childrenPart =
+          node.children!!.toList()
+            .map((c) -> renderChildInline(c))
+            .join(" ")
+        )
+        "\(indent)\(node.name)\(argsPart)\(attrsPart) { \(childrenPart) }"
+      else
+        let(childLines =
+          node.children!!.toList()
+            .map((c) -> renderNode(c, depth + 1))
+            .join("\n")
+        )
+        "\(indent)\(node.name)\(argsPart)\(attrsPart) {\n\(childLines)\n\(indent)}\(semi)"
+    else
+      "\(indent)\(node.name)\(argsPart)\(attrsPart)\(semi)"
+
+/// Render a top-level listing of KdlNodes into a full KDL document string
+function renderDocument(nodes: Listing<KdlNode>): String =
+  nodes.toList()
+    .map((n) -> renderNode(n, 0))
+    .join("\n") + "\n"

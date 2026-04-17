@@ -1,0 +1,22 @@
+amends "pkl:base"
+
+import ".../libs/kdl.pkl" as kdl
+
+local nodes: Listing<kdl.KdlNode> = new {
+  new {
+    name = "layout"
+    children = new {
+      new {
+        name = "border"
+        children = new {
+          new { name = "active-color"; args = new { "{{colors.primary.default.hex}}" } }
+          new { name = "inactive-color"; args = new { "{{colors.surface_variant.default.hex}}" } }
+        }
+      }
+    }
+  }
+}
+
+output {
+  text = kdl.renderDocument(nodes)
+}

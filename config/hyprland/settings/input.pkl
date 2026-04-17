@@ -1,0 +1,21 @@
+open module input
+import ".../libs/hyprlang.pkl" as r
+
+inputNodes: Listing<r.HyprNode> = new {
+  new {
+    name = "input"
+    children = new {
+      new { name = "kb_layout"; value = "us" }
+      new { name = "kb_options"; value = "caps:escape" }
+      new { name = "accel_profile"; value = "flat" }
+      new { name = "follow_mouse"; value = "1" }
+      new {
+        name = "touchpad"
+        children = new {
+          new { name = "natural_scroll"; value = "true" }
+          new { name = "tap-to-click"; value = "true" }
+        }
+      }
+    }
+  }
+}

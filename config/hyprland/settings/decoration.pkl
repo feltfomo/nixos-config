@@ -1,0 +1,21 @@
+open module decoration
+import ".../libs/hyprlang.pkl" as r
+
+decorationNodes: Listing<r.HyprNode> = new {
+  new {
+    name = "decoration"
+    children = new {
+      new { name = "active_opacity"; value = "@windowsOpacity@" }
+      new { name = "inactive_opacity"; value = "@windowsOpacity@" }
+      new { name = "rounding"; value = "10" }
+      new {
+        name = "blur"
+        children = new {
+          new { name = "enabled"; value = "true" }
+          new { name = "size"; value = "7" }
+          new { name = "passes"; value = "4" }
+        }
+      }
+    }
+  }
+}
